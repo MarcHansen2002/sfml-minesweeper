@@ -1,16 +1,23 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "game.h"
 
 int main()
 {
     //Initialise window
     sf::RenderWindow window(sf::VideoMode(1600, 900), "Marcsweeper!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    
+    srand(NULL);
+    game gameInst;
+    gameInst.windowRef = &window;
+    gameInst.Init(window);
+
+    sf::Clock clock;
    
     //Game loop
     while (window.isOpen())
     {
+        //Events (inputs, closing window etc)
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -18,8 +25,15 @@ int main()
                 window.close();
         }
    
+        //Updates & Restarting
         window.clear();
-        window.draw(shape);
+
+        float elapsed = clock.getElapsedTime().asSeconds(); //Gets time since last frame in ms
+        clock.restart(); //Restarts clock for next frame
+
+        gameInst.Update(window, elapsed); //Updates the game scene (collisions, movement etc)
+        gameInst.Render(window, elapsed); //Renders all actors onto the screen
+
         window.display();
     }
    

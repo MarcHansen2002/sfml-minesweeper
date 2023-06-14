@@ -1,2 +1,5 @@
-﻿  main.cpp
+﻿  actor.cpp
+  game.cpp
+  main.cpp
+  Generating Code...
   SFML-Minesweeper.vcxproj -> C:\Users\Marc\source\repos\SFML-Minesweeper\x64\Debug\SFML-Minesweeper.exe
