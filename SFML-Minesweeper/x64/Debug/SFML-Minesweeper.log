@@ -1,2 +1,38 @@
 ﻿  actor.cpp
-  SFML-Minesweeper.vcxproj -> C:\Users\Marc\Source\Repos\sfml-minesweeper\x64\Debug\SFML-Minesweeper.exe
+C:\Users\MarcH\source\repos\sfml-minesweeper\SFML-Minesweeper\actor.cpp(22,28): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+C:\Users\MarcH\source\repos\sfml-minesweeper\SFML-Minesweeper\actor.cpp(23,29): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+C:\Users\MarcH\source\repos\sfml-minesweeper\SFML-Minesweeper\actor.cpp(24,27): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+C:\Users\MarcH\source\repos\sfml-minesweeper\SFML-Minesweeper\actor.cpp(25,30): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+  SFML-Minesweeper.vcxproj -> C:\Users\MarcH\Source\Repos\sfml-minesweeper\x64\Debug\SFML-Minesweeper.exe

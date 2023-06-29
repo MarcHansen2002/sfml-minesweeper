@@ -10,7 +10,9 @@ struct SpriteSheet
 class actor
 {
 public:
+	sf::RenderWindow* windowRef;
 	sf::IntRect textRect;
+	sf::IntRect posRect;
 	sf::Texture texture;
 	sf::String texturePath;
 	sf::Sprite sprite;
@@ -21,7 +23,10 @@ public:
 	actor();
 	void Init();
 	void onClick();
+	void CheckCollisions();
 	void Update(float elapsed);
+	void DisplayHitbox(sf::RenderWindow& window);
+	sf::FloatRect GetRectCollision();
 };
 
 class tile : public actor
@@ -36,3 +41,4 @@ public:
 
 bool LoadTexture(const sf::String& file, sf::Texture& texture);
 
+bool IsMouseColliding(actor& actor, sf::RenderWindow& window);
