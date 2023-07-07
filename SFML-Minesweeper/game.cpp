@@ -4,7 +4,7 @@ void game::Update(sf::RenderWindow& window, float elapsed)
 {
 	for (int i = 0; i < actors.size(); i++)
 	{
-		actors[i]->CheckCollisions();
+		actors[i]->CheckCollisions(window);
 		actors[i]->Update(elapsed);
 	}
 }
@@ -14,6 +14,7 @@ void game::Render(sf::RenderWindow& window, float elapsed)
 	{
 		window.draw(actors[i]->sprite);
 		actors[i]->DisplayHitbox(*windowRef);
+		actors[i]->DisplayTextureRect(*windowRef);
 	}
 }
 game::game()

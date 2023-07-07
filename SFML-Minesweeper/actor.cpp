@@ -29,9 +29,9 @@ void actor::onClick()
 {
 
 }
-void actor::CheckCollisions()
+void actor::CheckCollisions(sf::RenderWindow& window)
 {
-	if (IsMouseColliding(*this, *windowRef))
+	if (IsMouseColliding(*this, window))
 	{
 		std::cout << "HOVER";
 	}
@@ -78,10 +78,10 @@ bool LoadTexture(const sf::String& file, sf::Texture& texture)
 sf::FloatRect actor::GetRectCollision()
 {
 	sf::IntRect TextRect = sprite.getTextureRect();
-	sf::FloatRect PositionalRect = { location.x - (TextRect.width / 2.f), //Left
-		location.y - (TextRect.height / 2.f), //Top
-		location.x + (TextRect.width / 2.f), //Right
-		location.y + (TextRect.height / 2.f) }; //Bottom
+	sf::FloatRect PositionalRect = { location.x - ((TextRect.width / 2.f) * scale.x), //Left
+		location.y - ((TextRect.height / 2.f) * scale.y), //Top
+		((float)TextRect.width) * scale.x, //Right
+		((float)TextRect.height) * scale.y }; //Bottom
 	return PositionalRect;
 }
 
@@ -89,13 +89,13 @@ sf::FloatRect actor::GetRectCollision()
 bool IsMouseColliding(actor& actor, sf::RenderWindow& window)
 {
 	sf::FloatRect actorPos = actor.GetRectCollision();
-	sf::Vector2i mousePos = sf::Mouse::getPosition();
+	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 	if (mousePos.x < actorPos.left)
 	{
 		std::cout << "too far left\n";
 		return false;
 	}
-	if (mousePos.x > actorPos.width)
+	if (mousePos.x > actorPos.width + actorPos.left)
 	{
 		std::cout << "too far right\n";
 		return false;
@@ -105,7 +105,7 @@ bool IsMouseColliding(actor& actor, sf::RenderWindow& window)
 		std::cout << "too far up\n";
 		return false;
 	}
-	if (mousePos.y > actorPos.top)
+	if (mousePos.y > actorPos.top + actorPos.height)
 	{
 		std::cout << "too far down\n";
 		return false;
@@ -119,10 +119,23 @@ void actor::DisplayHitbox(sf::RenderWindow& window)
 	sf::RectangleShape box;
 	sf::FloatRect rect = GetRectCollision();
 	box.setOrigin(0, 0);
+	box.setFillColor(sf::Color::Transparent);
 	box.setOutlineColor(sf::Color::Red);
 	box.setPosition(rect.left, rect.top);
-	box.setSize({ (float)textRect.width, (float)textRect.height });
+	box.setSize({ (float)rect.width, (float)rect.height });
 	box.setOutlineThickness(5);
 	window.draw(box);
 	
+}
+void actor::DisplayTextureRect(sf::RenderWindow& window)
+{
+	sf::RectangleShape box;
+	sf::IntRect rect = this->sprite.getTextureRect();
+	box.setOrigin(0, 0);
+	box.setFillColor(sf::Color::Transparent);
+	box.setOutlineColor(sf::Color::Blue);
+	box.setPosition(location.x, location.y);
+	box.setSize({ (float)rect.width, (float)rect.height });
+	box.setOutlineThickness(5);
+	window.draw(box);
 }

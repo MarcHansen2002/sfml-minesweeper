@@ -23,9 +23,10 @@ public:
 	actor();
 	void Init();
 	void onClick();
-	void CheckCollisions();
+	void CheckCollisions(sf::RenderWindow& window);
 	void Update(float elapsed);
 	void DisplayHitbox(sf::RenderWindow& window);
+	void DisplayTextureRect(sf::RenderWindow& window);
 	sf::FloatRect GetRectCollision();
 };
 
