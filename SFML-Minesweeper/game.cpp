@@ -13,12 +13,15 @@ void game::Render(sf::RenderWindow& window, float elapsed)
 	for (int i = 0; i < actors.size(); i++)
 	{
 		window.draw(actors[i]->sprite);
-		actors[i]->DisplayHitbox(*windowRef);
-		actors[i]->DisplayTextureRect(*windowRef);
+		if (DebugMode)
+		{
+			actors[i]->DisplayHitbox(*windowRef);
+		}
 	}
 }
 game::game()
 {
+	DebugMode = false;
 }
 void game::Init(sf::RenderWindow& window)
 {

@@ -23,8 +23,20 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+            if (event.type == sf::Event::KeyPressed)
+            {
+                std::cout << "button pressed";
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+                {
+                    std::cout << "Debug Toggled";
+                    gameInst.DebugMode = !(gameInst.DebugMode);
+                    
+                }
+            }
+
         }
    
+
         //Updates & Restarting
         window.clear();
 
@@ -40,3 +52,7 @@ int main()
     //End
     return 0;
 }
+
+//TODO
+//Sort actors from left to right and only check collisions on actors left of the mouse
+//Click events for actors

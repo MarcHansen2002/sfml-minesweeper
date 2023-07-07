@@ -92,22 +92,18 @@ bool IsMouseColliding(actor& actor, sf::RenderWindow& window)
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 	if (mousePos.x < actorPos.left)
 	{
-		std::cout << "too far left\n";
 		return false;
 	}
 	if (mousePos.x > actorPos.width + actorPos.left)
 	{
-		std::cout << "too far right\n";
 		return false;
 	}
 	if (mousePos.y < actorPos.top)
 	{
-		std::cout << "too far up\n";
 		return false;
 	}
 	if (mousePos.y > actorPos.top + actorPos.height)
 	{
-		std::cout << "too far down\n";
 		return false;
 	}
 	return true;

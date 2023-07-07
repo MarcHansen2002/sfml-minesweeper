@@ -5,6 +5,7 @@
 class game
 {
 public:
+	bool DebugMode;
 	std::vector<actor*> actors;
 	sf::RenderWindow* windowRef;
 
