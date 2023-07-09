@@ -22,11 +22,13 @@ public:
 
 	actor();
 	void Init();
-	void onClick();
+	virtual void onLeftClick();
+	virtual void onRightClick();
 	void CheckCollisions(sf::RenderWindow& window);
-	void Update(float elapsed);
+	virtual void Update(float elapsed);
 	void DisplayHitbox(sf::RenderWindow& window);
 	void DisplayTextureRect(sf::RenderWindow& window);
+	void UpdateSprite();
 	sf::FloatRect GetRectCollision();
 };
 
@@ -34,10 +36,13 @@ class tile : public actor
 {
 public:
 	bool revealed;
+	bool flagged;
 	int id;
 
 	tile();
 	void Update(float elapsed);
+	void onLeftClick();
+	void onRightClick();
 };
 
 bool LoadTexture(const sf::String& file, sf::Texture& texture);

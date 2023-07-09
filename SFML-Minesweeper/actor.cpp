@@ -14,7 +14,11 @@ void actor::Init()
 	sprite.setTexture(texture);
 
 	location = { 500, 100 };
-
+	UpdateSprite();
+	
+}
+void actor::UpdateSprite()
+{
 	textRect = sf::IntRect(((sheetData.index - 1) % sheetData.columns) * texture.getSize().x / sheetData.columns, ((sheetData.index - 1) / sheetData.columns) * texture.getSize().y / sheetData.rows, texture.getSize().x / sheetData.columns, texture.getSize().y / sheetData.rows);
 	sprite.setOrigin(textRect.width / 2.f, textRect.height / 2.f);
 	sprite.setTextureRect(textRect);
@@ -25,16 +29,16 @@ void actor::Init()
 	posRect.height = location.y + textRect.height / 2.f;
 }
 //When this actor is clicked
-void actor::onClick()
+void actor::onLeftClick()
+{
+
+}
+void actor::onRightClick()
 {
 
 }
 void actor::CheckCollisions(sf::RenderWindow& window)
 {
-	if (IsMouseColliding(*this, window))
-	{
-		std::cout << "HOVER";
-	}
 }
 void actor::Update(float elapsed)
 {
@@ -49,6 +53,9 @@ tile::tile()
 	scale = { 5, 5 };
 	sheetData.columns = 3;
 	sheetData.rows = 4;
+
+	revealed = false;
+	flagged = false;
 }
 
 void tile::Update(float elapsed)
@@ -58,7 +65,24 @@ void tile::Update(float elapsed)
 	{
 		sheetData.index = id;
 	}
+	else if (flagged)
+	{
+		sheetData.index = 10;
+	}
+	else
+	{
+		sheetData.index = 1;
+	}
+	UpdateSprite();
 
+}
+void tile::onLeftClick()
+{
+	std::cout << "left";
+}
+void tile::onRightClick()
+{
+	flagged = !flagged;
 }
 
 bool LoadTexture(const sf::String& file, sf::Texture& texture)

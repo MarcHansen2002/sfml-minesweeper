@@ -25,15 +25,42 @@ int main()
                 window.close();
             if (event.type == sf::Event::KeyPressed)
             {
-                std::cout << "button pressed";
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
                 {
-                    std::cout << "Debug Toggled";
                     gameInst.DebugMode = !(gameInst.DebugMode);
-                    
                 }
             }
-
+            if (event.type == sf::Event::MouseButtonPressed)
+            {
+                //Check if mouse is colliding with an actor
+                actor* hovered = NULL;
+                bool found = false;
+                for (int i = 0; i < gameInst.actors.size(); i++)
+                {
+                    if (IsMouseColliding(*gameInst.actors[i], window))
+                    {
+                        hovered = gameInst.actors[i];
+                        found = true;
+                        i = gameInst.actors.size() + 1;
+                    }
+                }
+                if (found)
+                {
+                    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                    {
+                        hovered->onLeftClick();
+                    }
+                    else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+                    {
+                        hovered->onRightClick();
+                    }
+                }
+                else
+                {
+                    std::cout << "no actor clicked";
+                }
+                
+            }
         }
    
 
