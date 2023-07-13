@@ -7,7 +7,7 @@ int main()
     //Initialise window
     sf::RenderWindow window(sf::VideoMode(1600, 900), "Marcsweeper!");
     
-    srand(NULL);
+    srand(time(NULL));
     game gameInst;
     gameInst.windowRef = &window;
     gameInst.Init(window);

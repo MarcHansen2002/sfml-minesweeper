@@ -15,6 +15,8 @@ public:
 	void Render(sf::RenderWindow& window, float elapsed); //Called every frame to draw all actors
 	void Init(sf::RenderWindow& window); //Initialise the main game
 	void ClearActors(); //Clears all the actors and removes them from the heap
+	void GenerateField(sf::Vector2i mapSize);
+	void AddMines(int amount);
 	game();
 };
 

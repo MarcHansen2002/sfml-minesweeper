@@ -82,6 +82,7 @@ void actor::DisplayTextureRect(sf::RenderWindow& window)
 
 tile::tile()
 {
+	type = "tile";
 	texturePath = "../Assets/SweeperSheet.png";
 	scale = { 5, 5 };
 	sheetData.columns = 3;

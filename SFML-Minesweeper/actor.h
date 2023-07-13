@@ -19,6 +19,7 @@ public:
 	SpriteSheet sheetData;
 	sf::Vector2f location;
 	sf::Vector2f scale;
+	sf::String type = "actor";
 
 	actor();
 	void Init();
