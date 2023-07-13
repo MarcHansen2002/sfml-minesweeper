@@ -10,12 +10,16 @@ actor::actor()
 //Initialise actor after the constructor
 void actor::Init()
 {
+	std::cout << "init";
 	LoadTexture(texturePath, texture);
 	sprite.setTexture(texture);
 
-	location = { 500, 100 };
 	UpdateSprite();
 	
+}
+void actor::Render(sf::RenderWindow& window)
+{
+	window.draw(sprite);
 }
 void actor::UpdateSprite()
 {
@@ -35,7 +39,7 @@ void actor::onLeftClick()
 }
 void actor::onRightClick()
 {
-
+	std::cout << "test";
 }
 void actor::CheckCollisions(sf::RenderWindow& window)
 {
@@ -78,26 +82,22 @@ void tile::Update(float elapsed)
 }
 void tile::onLeftClick()
 {
-	std::cout << "left";
+	if (!flagged && !revealed)
+	{
+		revealed = true;
+		if (id == 11)
+		{
+			//End Game, mine clicked
+		}
+	}
 }
 void tile::onRightClick()
 {
+	std::cout << "flagged";
 	flagged = !flagged;
 }
 
-bool LoadTexture(const sf::String& file, sf::Texture& texture)
-{
-	if (texture.loadFromFile(file))
-	{
-		return true;
-	}
-	else if (texture.loadFromFile("../Assets/MissingTexture.png"))
-	{
-		return false;
-	}
-	assert(false);
-	return false;
-}
+
 
 sf::FloatRect actor::GetRectCollision()
 {
@@ -158,4 +158,15 @@ void actor::DisplayTextureRect(sf::RenderWindow& window)
 	box.setSize({ (float)rect.width, (float)rect.height });
 	box.setOutlineThickness(5);
 	window.draw(box);
+}
+
+
+bool LoadTexture(const sf::String& file, sf::Texture& texture)
+{
+	if (texture.loadFromFile(file))
+	{
+		return true;
+	}
+	assert(false);
+	return false;
 }

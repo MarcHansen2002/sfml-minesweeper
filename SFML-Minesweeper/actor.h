@@ -7,10 +7,12 @@ struct SpriteSheet
 	int columns = 1;
 };
 
+class game;
+
 class actor
 {
 public:
-	sf::RenderWindow* windowRef;
+	sf::RenderWindow* windowRef = nullptr;
 	sf::IntRect textRect;
 	sf::IntRect posRect;
 	sf::Texture texture;
@@ -22,6 +24,7 @@ public:
 
 	actor();
 	void Init();
+	void Render(sf::RenderWindow& window);
 	virtual void onLeftClick();
 	virtual void onRightClick();
 	void CheckCollisions(sf::RenderWindow& window);
@@ -42,7 +45,7 @@ public:
 	tile();
 	void Update(float elapsed);
 	void onLeftClick();
-	void onRightClick();
+	void onRightClick() override;
 };
 
 bool LoadTexture(const sf::String& file, sf::Texture& texture);
