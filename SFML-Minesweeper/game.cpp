@@ -1,6 +1,20 @@
 #include "game.h"
 #include <iostream>
 
+bool sortTiles(actor* a, actor* b)
+{
+	//Return A if A is above B
+	if (a->location.y != b->location.y)
+	{
+		return (a->location.y < b->location.y);
+	}
+	//Return A if A AND B are on the same layer but A is further left than B
+	else
+	{
+		return (a->location.x < b->location.x);
+	}
+}
+
 void game::Update(sf::RenderWindow& window, float elapsed)
 {
 	//Loop through actor list, check collisions and update
@@ -34,6 +48,7 @@ void game::Init(sf::RenderWindow& window)
 	//Adds tiles to scene
 	GenerateField({ 10, 10 });
 	AddMines(10);
+	SetNumbers({ 10, 10 });
 }
 
 void game::ClearActors()
@@ -60,7 +75,7 @@ void game::GenerateField(sf::Vector2i fieldSize)
 			tileObj = new tile;
 
 			//Add the tile to the actors list and initialise it
-			tileObj->id = 2;
+			tileObj->id = 1;
 			tileObj->Init();
 			tileObj->location = { 100 + (i * (tileObj->textRect.width * tileObj->scale.x)), 100 + (x * (tileObj->textRect.height * tileObj->scale.y)) };
 			actors.push_back(tileObj);
@@ -84,5 +99,77 @@ void game::AddMines(int amount)
 		int selected = rand() % (tiles.size() - 1);
 		dynamic_cast<tile*>(tiles[selected])->id = 11;
 		tiles.erase(tiles.begin() + selected);
+	}
+}
+void game::SetNumbers(sf::Vector2i fieldSize)
+{
+	//Get all the tile actors in a vector
+	std::vector<actor*> tiles;
+	for (int i = 0; i < actors.size(); i++)
+	{
+		if (actors[i]->type == "tile")
+		{
+			tiles.push_back(actors[i]);
+		}
+	}
+	//Sort tiles in order going from top left to top right
+	std::sort(tiles.begin(), tiles.end(), sortTiles);
+
+	//Loop through them to set what number they will be
+	for (int i = 0; i < tiles.size(); i++)
+	{
+		if (dynamic_cast<tile*>(tiles[i])->id != 11)
+		{
+			int surrounding = 0;
+			bool onLeft = (i % fieldSize.x == 0); //Checks if tile is on the far left of the field
+			bool onRight = (i % fieldSize.x == fieldSize.x - 1); //Checks if tile is on the far right of the field
+			bool onTop = (i / fieldSize.y == 0); // Checks if the tile is on the top of the field
+			bool onBot = (i / fieldSize.y == fieldSize.y - 1); //Checks if the tile is on the bottom of the field
+
+			if (!onTop)
+			{
+				//Check above tile
+				if (dynamic_cast<tile*>(tiles[i - fieldSize.x])->id == 11) { surrounding++; }
+				//Check above left tile
+				if (!onLeft)
+				{
+					if (dynamic_cast<tile*>(tiles[i - (fieldSize.x + 1)])->id == 11) { surrounding++; }
+				}
+				//Check above right tile
+				if (!onRight)
+				{
+					if (dynamic_cast<tile*>(tiles[i - (fieldSize.x - 1)])->id == 11) { surrounding++; }
+				}
+			}
+			if (!onLeft)
+			{
+				//Check left tile
+				if (dynamic_cast<tile*>(tiles[i - 1])->id == 11) { surrounding++; }
+			}
+			if (!onRight)
+			{
+				//Check right tile
+				if (dynamic_cast<tile*>(tiles[i + 1])->id == 11) { surrounding++; }
+			}
+			if (!onBot)
+			{
+				//Check below tile
+				if (dynamic_cast<tile*>(tiles[i + fieldSize.x])->id == 11) { surrounding++; }
+				//Check below left tile
+				if (!onLeft)
+				{
+					if (dynamic_cast<tile*>(tiles[i + (fieldSize.x - 1)])->id == 11) { surrounding++; }
+				}
+				//Check below right tile
+				if (!onRight)
+				{
+					if (dynamic_cast<tile*>(tiles[i + (fieldSize.x + 1)])->id == 11) { surrounding++; }
+				}
+			}
+			if (surrounding > 0)
+			{
+				dynamic_cast<tile*>(tiles[i])->id = 10 - surrounding;
+			}
+		}
 	}
 }
