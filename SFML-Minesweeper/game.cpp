@@ -28,6 +28,9 @@ game::game()
 }
 void game::Init(sf::RenderWindow& window)
 {
+	//Clear all actors and remove them from heap
+	ClearActors();
+
 	//The mapsize of the minesweeper grid
 	sf::Vector2i mapSize = { 10, 10 };
 	//Loop through X and Y of the grid and instantiate a tile for each location
@@ -46,5 +49,17 @@ void game::Init(sf::RenderWindow& window)
 			actors[act]->Init();
 			actors[act]->location = { 100 + (i * (actors[act]->textRect.width * actors[act]->scale.x)), 100 + (x * (actors[act]->textRect.height * actors[act]->scale.y)) };
 		}
+	}
+}
+
+void game::ClearActors()
+{
+	//Loops through all actors
+	for (int i = 0; i < actors.size(); i++)
+	{
+		//Delete actor from this location off the heap
+		delete actors[i];
+		//Clear the reference to deleted actor
+		actors[i] = nullptr;
 	}
 }

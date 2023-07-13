@@ -7,8 +7,6 @@ struct SpriteSheet
 	int columns = 1;
 };
 
-class game;
-
 class actor
 {
 public:
