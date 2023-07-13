@@ -11,9 +11,9 @@ public:
 
 	tile TestTile;
 
-	void Update(sf::RenderWindow& window, float elapsed);
-	void Render(sf::RenderWindow& window, float elapsed);
-	void Init(sf::RenderWindow& window);
+	void Update(sf::RenderWindow& window, float elapsed); //Called every frame to update actors
+	void Render(sf::RenderWindow& window, float elapsed); //Called every frame to draw all actors
+	void Init(sf::RenderWindow& window); //Initialise the main game
 	game();
 };
 

@@ -38,9 +38,9 @@ public:
 class tile : public actor
 {
 public:
-	bool revealed;
-	bool flagged;
-	int id;
+	bool revealed; //If the tile has been clicked (revealed)
+	bool flagged; //If the tile has been flagged (right clicked)
+	int id; //Type of tile it is: number, bomb, empty
 
 	tile();
 	void Update(float elapsed);
@@ -49,5 +49,4 @@ public:
 };
 
 bool LoadTexture(const sf::String& file, sf::Texture& texture);
-
 bool IsMouseColliding(actor& actor, sf::RenderWindow& window);

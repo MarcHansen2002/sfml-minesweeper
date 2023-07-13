@@ -44,6 +44,7 @@ int main()
                         i = gameInst.actors.size() + 1;
                     }
                 }
+                //If actor is under mouse call left or right click event depending on click
                 if (found)
                 {
                     if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -55,11 +56,6 @@ int main()
                         hovered->onRightClick();
                     }
                 }
-                else
-                {
-                    std::cout << "no actor clicked";
-                }
-                
             }
         }
    
@@ -82,4 +78,3 @@ int main()
 
 //TODO
 //Sort actors from left to right and only check collisions on actors left of the mouse
-//Click events for actors
