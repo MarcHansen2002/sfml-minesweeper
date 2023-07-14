@@ -166,9 +166,14 @@ void game::SetNumbers(sf::Vector2i fieldSize)
 					if (dynamic_cast<tile*>(tiles[i + (fieldSize.x + 1)])->id == 11) { surrounding++; }
 				}
 			}
+			//Changes id depending on how many bombs surround the tile
 			if (surrounding > 0)
 			{
-				dynamic_cast<tile*>(tiles[i])->id = 10 - surrounding;
+				dynamic_cast<tile*>(tiles[i])->id = surrounding; //ID for numbered tile depending on amount of bombs surrounding
+			}
+			else
+			{
+				dynamic_cast<tile*>(tiles[i])->id = 9; //ID for empty tile
 			}
 		}
 	}

@@ -10,7 +10,6 @@ actor::actor()
 //Initialise actor after the constructor
 void actor::Init()
 {
-	std::cout << "init";
 	LoadTexture(texturePath, texture);
 	sprite.setTexture(texture);
 
@@ -106,7 +105,7 @@ void tile::Update(float elapsed)
 	}
 	else
 	{
-		sheetData.index = 1; //If tile is not revealed or flagged use the default sprite
+		sheetData.index = 12; //If tile is not revealed or flagged use the default sprite
 	}
 	UpdateSprite();
 

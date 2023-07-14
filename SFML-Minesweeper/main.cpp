@@ -77,4 +77,6 @@ int main()
 }
 
 //TODO
-//Sort actors from left to right and only check collisions on actors left of the mouse
+//Sort actors from left to right and only check collisions on actors left of the mouse for optimisation
+//When clicking on an empty tile auto unlock any surrounding tiles
+//Have a seperate sprite for opened tiles so you know whats been clicked
