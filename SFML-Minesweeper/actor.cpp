@@ -119,6 +119,10 @@ void tile::onLeftClick()
 		{
 			//End Game, mine clicked
 		}
+		else if (id == 9)
+		{
+			//Empty tile, check surrounding
+		}
 	}
 }
 void tile::onRightClick()

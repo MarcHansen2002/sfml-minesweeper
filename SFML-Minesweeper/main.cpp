@@ -50,6 +50,10 @@ int main()
                     if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
                     {
                         hovered->onLeftClick();
+                        if (dynamic_cast<tile*>(hovered)->id == 9)
+                        {
+                            gameInst.OpenSurroundingEmptyTiles(gameInst.fieldSize, dynamic_cast<tile*>(hovered)->GridLoc);
+                        }
                     }
                     else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
                     {
@@ -79,4 +83,4 @@ int main()
 //TODO
 //Sort actors from left to right and only check collisions on actors left of the mouse for optimisation
 //When clicking on an empty tile auto unlock any surrounding tiles
-//Have a seperate sprite for opened tiles so you know whats been clicked
+//Middle mouse button

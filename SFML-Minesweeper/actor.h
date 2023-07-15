@@ -40,6 +40,7 @@ public:
 	bool revealed; //If the tile has been clicked (revealed)
 	bool flagged; //If the tile has been flagged (right clicked)
 	int id; //Type of tile it is: number, bomb, empty
+	int GridLoc; //Location of tile on the grid
 
 	tile();
 	void Update(float elapsed);

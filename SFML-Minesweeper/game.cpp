@@ -14,6 +14,19 @@ bool sortTiles(actor* a, actor* b)
 		return (a->location.x < b->location.x);
 	}
 }
+std::vector<tile*> game::getAllTiles()
+{
+	//Get all the tile actors in a vector
+	std::vector<tile*> tiles;
+	for (int i = 0; i < actors.size(); i++)
+	{
+		if (actors[i]->type == "tile")
+		{
+			tiles.push_back(dynamic_cast<tile*>(actors[i]));
+		}
+	}
+	return tiles;
+}
 
 void game::Update(sf::RenderWindow& window, float elapsed)
 {
@@ -76,6 +89,7 @@ void game::GenerateField(sf::Vector2i fieldSize)
 
 			//Add the tile to the actors list and initialise it
 			tileObj->id = 1;
+			tileObj->GridLoc = ((1 + i) + (fieldSize.x * x)) - 1;
 			tileObj->Init();
 			tileObj->location = { 100 + (i * (tileObj->textRect.width * tileObj->scale.x)), 100 + (x * (tileObj->textRect.height * tileObj->scale.y)) };
 			actors.push_back(tileObj);
@@ -103,22 +117,15 @@ void game::AddMines(int amount)
 }
 void game::SetNumbers(sf::Vector2i fieldSize)
 {
-	//Get all the tile actors in a vector
-	std::vector<actor*> tiles;
-	for (int i = 0; i < actors.size(); i++)
-	{
-		if (actors[i]->type == "tile")
-		{
-			tiles.push_back(actors[i]);
-		}
-	}
+	std::vector<tile*> tiles = getAllTiles();
+
 	//Sort tiles in order going from top left to top right
 	std::sort(tiles.begin(), tiles.end(), sortTiles);
 
 	//Loop through them to set what number they will be
 	for (int i = 0; i < tiles.size(); i++)
 	{
-		if (dynamic_cast<tile*>(tiles[i])->id != 11)
+		if (tiles[i]->id != 11)
 		{
 			int surrounding = 0;
 			bool onLeft = (i % fieldSize.x == 0); //Checks if tile is on the far left of the field
@@ -129,52 +136,110 @@ void game::SetNumbers(sf::Vector2i fieldSize)
 			if (!onTop)
 			{
 				//Check above tile
-				if (dynamic_cast<tile*>(tiles[i - fieldSize.x])->id == 11) { surrounding++; }
+				if (tiles[i - fieldSize.x]->id == 11) { surrounding++; }
 				//Check above left tile
 				if (!onLeft)
 				{
-					if (dynamic_cast<tile*>(tiles[i - (fieldSize.x + 1)])->id == 11) { surrounding++; }
+					if (tiles[i - (fieldSize.x + 1)]->id == 11) { surrounding++; }
 				}
 				//Check above right tile
 				if (!onRight)
 				{
-					if (dynamic_cast<tile*>(tiles[i - (fieldSize.x - 1)])->id == 11) { surrounding++; }
+					if (tiles[i - (fieldSize.x - 1)]->id == 11) { surrounding++; }
 				}
 			}
 			if (!onLeft)
 			{
 				//Check left tile
-				if (dynamic_cast<tile*>(tiles[i - 1])->id == 11) { surrounding++; }
+				if (tiles[i - 1]->id == 11) { surrounding++; }
 			}
 			if (!onRight)
 			{
 				//Check right tile
-				if (dynamic_cast<tile*>(tiles[i + 1])->id == 11) { surrounding++; }
+				if (tiles[i + 1]->id == 11) { surrounding++; }
 			}
 			if (!onBot)
 			{
 				//Check below tile
-				if (dynamic_cast<tile*>(tiles[i + fieldSize.x])->id == 11) { surrounding++; }
+				if (tiles[i + fieldSize.x]->id == 11) { surrounding++; }
 				//Check below left tile
 				if (!onLeft)
 				{
-					if (dynamic_cast<tile*>(tiles[i + (fieldSize.x - 1)])->id == 11) { surrounding++; }
+					if (tiles[i + (fieldSize.x - 1)]->id == 11) { surrounding++; }
 				}
 				//Check below right tile
 				if (!onRight)
 				{
-					if (dynamic_cast<tile*>(tiles[i + (fieldSize.x + 1)])->id == 11) { surrounding++; }
+					if (tiles[i + (fieldSize.x + 1)]->id == 11) { surrounding++; }
 				}
 			}
 			//Changes id depending on how many bombs surround the tile
 			if (surrounding > 0)
 			{
-				dynamic_cast<tile*>(tiles[i])->id = surrounding; //ID for numbered tile depending on amount of bombs surrounding
+				tiles[i]->id = surrounding; //ID for numbered tile depending on amount of bombs surrounding
 			}
 			else
 			{
-				dynamic_cast<tile*>(tiles[i])->id = 9; //ID for empty tile
+				tiles[i]->id = 9; //ID for empty tile
 			}
 		}
+	}
+}
+void game::OpenSurroundingEmptyTiles(sf::Vector2i fieldSize, int tileLoc)
+{
+	//Get all the tile actors in a vector
+	std::vector<tile*> tiles = getAllTiles();
+	//Sort tiles in order going from top left to top right
+	std::sort(tiles.begin(), tiles.end(), sortTiles);
+
+	//Check if clicked tile is on any edges
+	bool onLeft = (tileLoc % fieldSize.x == 0); //Checks if tile is on the far left of the field
+	bool onRight = (tileLoc % fieldSize.x == fieldSize.x - 1); //Checks if tile is on the far right of the field
+	bool onTop = (tileLoc / fieldSize.y == 0); // Checks if the tile is on the top of the field
+	bool onBot = (tileLoc / fieldSize.y == fieldSize.y - 1); //Checks if the tile is on the bottom of the field
+
+	
+	if (!onTop) //Check above
+	{
+		ForceOpenTile(fieldSize, (tileLoc - fieldSize.x), tiles);
+
+		if (!onLeft) //Check top left
+		{
+			ForceOpenTile(fieldSize, (tileLoc - (fieldSize.x + 1)), tiles);
+		}
+		if (!onRight) //Check top right
+		{
+			ForceOpenTile(fieldSize, (tileLoc - (fieldSize.x - 1)), tiles);
+		}
+	}
+	if (!onLeft) //Check left
+	{
+		ForceOpenTile(fieldSize, (tileLoc - 1), tiles);
+	}
+	if (!onRight) //Check right
+	{
+		ForceOpenTile(fieldSize, (tileLoc + 1), tiles);
+	}
+	if (!onBot) //Check below
+	{
+
+		ForceOpenTile(fieldSize, (tileLoc + fieldSize.x), tiles);
+		if (!onLeft) //Check down left
+		{
+			ForceOpenTile(fieldSize, (tileLoc + (fieldSize.x - 1)), tiles);
+		}
+		if (!onRight) //Check down right
+		{
+			ForceOpenTile(fieldSize, (tileLoc + (fieldSize.x + 1)), tiles);
+		}
+	}
+}
+void game::ForceOpenTile(sf::Vector2i fieldSize, int tileLoc, std::vector<tile*> tiles)
+{
+	bool previouslyFound = tiles[tileLoc]->revealed;
+	tiles[tileLoc]->revealed = true;
+	if ((tiles[tileLoc]->id == 9) && (!previouslyFound))
+	{
+		OpenSurroundingEmptyTiles(fieldSize, tileLoc);
 	}
 }

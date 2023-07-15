@@ -9,7 +9,7 @@ public:
 	std::vector<actor*> actors;
 	sf::RenderWindow* windowRef;
 
-	tile TestTile;
+	sf::Vector2i fieldSize = { 10, 10 };
 
 	void Update(sf::RenderWindow& window, float elapsed); //Called every frame to update actors
 	void Render(sf::RenderWindow& window, float elapsed); //Called every frame to draw all actors
@@ -18,6 +18,9 @@ public:
 	void GenerateField(sf::Vector2i mapSize);
 	void AddMines(int amount);
 	void SetNumbers(sf::Vector2i fieldSize);
+	void OpenSurroundingEmptyTiles(sf::Vector2i fieldSize, int tileLoc);
+	void ForceOpenTile(sf::Vector2i fieldSize, int tileLoc, std::vector<tile*> tiles);
+	std::vector<tile*> getAllTiles();
 	game();
 };
 
