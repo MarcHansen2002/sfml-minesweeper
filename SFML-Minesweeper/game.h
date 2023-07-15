@@ -24,6 +24,7 @@ public:
 	void CheckForEmpties(sf::Vector2i fieldSize, int tileLoc);
 	void ForceOpenTile(sf::Vector2i fieldSize, int tileLoc, std::vector<tile*> tiles);
 	void SoftForceOpenTile(sf::Vector2i fieldSize, int tileLoc, std::vector<tile*> tiles);
+	void MoveBomb(int tileLoc);
 	std::vector<tile*> getAllTiles();
 	game();
 };

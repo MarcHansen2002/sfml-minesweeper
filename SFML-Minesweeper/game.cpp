@@ -304,3 +304,19 @@ void game::SoftForceOpenTile(sf::Vector2i fieldSize, int tileLoc, std::vector<ti
 		}
 	}
 }
+void game::MoveBomb(int tileLoc)
+{
+	std::vector<tile*> tiles = getAllTiles();
+	std::sort(tiles.begin(), tiles.end(), sortTiles);
+
+	tiles[tileLoc]->id = 1;
+	for (int i = 0; i < tiles.size(); i++)
+	{
+		if ((i != tileLoc) && (tiles[tileLoc]->id != 11))
+		{
+			tiles[i]->id = 11;
+			i = tiles.size() + 1;
+		}
+	}
+	SetNumbers(fieldSize);
+}

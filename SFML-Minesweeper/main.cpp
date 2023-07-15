@@ -52,9 +52,9 @@ int main()
                         if (!gameInst.clickedAnywhere)
                         {
                             gameInst.clickedAnywhere = true;
-                            if (dynamic_cast<tile*>(hovered)->id == 10)
+                            if (dynamic_cast<tile*>(hovered)->id == 11)
                             {
-                                //Move bomb and re-gen numbers
+                                gameInst.MoveBomb(dynamic_cast<tile*>(hovered)->GridLoc);
                             }
                         }
                         hovered->onLeftClick();
@@ -94,4 +94,3 @@ int main()
 
 //TODO
 //Middle mouse button
-//If first tile clicked is bomb, move bomb to first non-bomb tile then re-generate numbers
