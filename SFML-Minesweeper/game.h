@@ -9,7 +9,8 @@ public:
 	std::vector<actor*> actors;
 	sf::RenderWindow* windowRef;
 
-	sf::Vector2i fieldSize = { 10, 10 };
+	sf::Vector2i fieldSize = { 30, 16 };
+	int mineCount = 99;
 
 	void Update(sf::RenderWindow& window, float elapsed); //Called every frame to update actors
 	void Render(sf::RenderWindow& window, float elapsed); //Called every frame to draw all actors

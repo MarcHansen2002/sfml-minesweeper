@@ -59,9 +59,9 @@ void game::Init(sf::RenderWindow& window)
 	//Clear all actors and remove them from heap
 	ClearActors();
 	//Adds tiles to scene
-	GenerateField({ 10, 10 });
-	AddMines(10);
-	SetNumbers({ 10, 10 });
+	GenerateField(fieldSize);
+	AddMines(mineCount);
+	SetNumbers(fieldSize);
 }
 
 void game::ClearActors()
@@ -130,8 +130,8 @@ void game::SetNumbers(sf::Vector2i fieldSize)
 			int surrounding = 0;
 			bool onLeft = (i % fieldSize.x == 0); //Checks if tile is on the far left of the field
 			bool onRight = (i % fieldSize.x == fieldSize.x - 1); //Checks if tile is on the far right of the field
-			bool onTop = (i / fieldSize.y == 0); // Checks if the tile is on the top of the field
-			bool onBot = (i / fieldSize.y == fieldSize.y - 1); //Checks if the tile is on the bottom of the field
+			bool onTop = (i / fieldSize.x == 0); // Checks if the tile is on the top of the field
+			bool onBot = (i / fieldSize.x == fieldSize.y - 1); //Checks if the tile is on the bottom of the field
 
 			if (!onTop)
 			{
@@ -195,8 +195,8 @@ void game::OpenSurroundingEmptyTiles(sf::Vector2i fieldSize, int tileLoc)
 	//Check if clicked tile is on any edges
 	bool onLeft = (tileLoc % fieldSize.x == 0); //Checks if tile is on the far left of the field
 	bool onRight = (tileLoc % fieldSize.x == fieldSize.x - 1); //Checks if tile is on the far right of the field
-	bool onTop = (tileLoc / fieldSize.y == 0); // Checks if the tile is on the top of the field
-	bool onBot = (tileLoc / fieldSize.y == fieldSize.y - 1); //Checks if the tile is on the bottom of the field
+	bool onTop = (tileLoc / fieldSize.x == 0); // Checks if the tile is on the top of the field
+	bool onBot = (tileLoc / fieldSize.x == fieldSize.y - 1); //Checks if the tile is on the bottom of the field
 
 	
 	if (!onTop) //Check above

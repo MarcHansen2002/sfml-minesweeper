@@ -83,7 +83,7 @@ tile::tile()
 {
 	type = "tile";
 	texturePath = "../Assets/SweeperSheet.png";
-	scale = { 5, 5 };
+	scale = { 2, 2 };
 	sheetData.columns = 3;
 	sheetData.rows = 4;
 
