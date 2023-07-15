@@ -49,10 +49,22 @@ int main()
                 {
                     if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
                     {
+                        if (!gameInst.clickedAnywhere)
+                        {
+                            gameInst.clickedAnywhere = true;
+                            if (dynamic_cast<tile*>(hovered)->id == 10)
+                            {
+                                //Move bomb and re-gen numbers
+                            }
+                        }
                         hovered->onLeftClick();
                         if (dynamic_cast<tile*>(hovered)->id == 9)
                         {
                             gameInst.OpenSurroundingEmptyTiles(gameInst.fieldSize, dynamic_cast<tile*>(hovered)->GridLoc);
+                        }
+                        else if (dynamic_cast<tile*>(hovered)->id < 9)
+                        {
+                            gameInst.CheckForEmpties(gameInst.fieldSize, dynamic_cast<tile*>(hovered)->GridLoc);
                         }
                     }
                     else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
@@ -81,6 +93,5 @@ int main()
 }
 
 //TODO
-//Sort actors from left to right and only check collisions on actors left of the mouse for optimisation
-//When clicking on an empty tile auto unlock any surrounding tiles
 //Middle mouse button
+//If first tile clicked is bomb, move bomb to first non-bomb tile then re-generate numbers

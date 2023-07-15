@@ -185,6 +185,55 @@ void game::SetNumbers(sf::Vector2i fieldSize)
 		}
 	}
 }
+void game::CheckForEmpties(sf::Vector2i fieldSize, int tileLoc)
+{
+	//Get all the tile actors in a vector
+	std::vector<tile*> tiles = getAllTiles();
+	//Sort tiles in order going from top left to top right
+	std::sort(tiles.begin(), tiles.end(), sortTiles);
+
+	//Check if clicked tile is on any edges
+	bool onLeft = (tileLoc % fieldSize.x == 0); //Checks if tile is on the far left of the field
+	bool onRight = (tileLoc % fieldSize.x == fieldSize.x - 1); //Checks if tile is on the far right of the field
+	bool onTop = (tileLoc / fieldSize.x == 0); // Checks if the tile is on the top of the field
+	bool onBot = (tileLoc / fieldSize.x == fieldSize.y - 1); //Checks if the tile is on the bottom of the field
+
+
+	if (!onTop) //Check above
+	{
+		SoftForceOpenTile(fieldSize, (tileLoc - fieldSize.x), tiles);
+
+		if (!onLeft) //Check top left
+		{
+			SoftForceOpenTile(fieldSize, (tileLoc - (fieldSize.x + 1)), tiles);
+		}
+		if (!onRight) //Check top right
+		{
+			SoftForceOpenTile(fieldSize, (tileLoc - (fieldSize.x - 1)), tiles);
+		}
+	}
+	if (!onLeft) //Check left
+	{
+		SoftForceOpenTile(fieldSize, (tileLoc - 1), tiles);
+	}
+	if (!onRight) //Check right
+	{
+		SoftForceOpenTile(fieldSize, (tileLoc + 1), tiles);
+	}
+	if (!onBot) //Check below
+	{
+
+		SoftForceOpenTile(fieldSize, (tileLoc + fieldSize.x), tiles);
+		if (!onLeft) //Check down left
+		{
+			SoftForceOpenTile(fieldSize, (tileLoc + (fieldSize.x - 1)), tiles);
+		}
+		if (!onRight) //Check down right
+		{
+			SoftForceOpenTile(fieldSize, (tileLoc + (fieldSize.x + 1)), tiles);
+		}
+	}
+}
 void game::OpenSurroundingEmptyTiles(sf::Vector2i fieldSize, int tileLoc)
 {
 	//Get all the tile actors in a vector
@@ -241,5 +290,17 @@ void game::ForceOpenTile(sf::Vector2i fieldSize, int tileLoc, std::vector<tile*>
 	if ((tiles[tileLoc]->id == 9) && (!previouslyFound))
 	{
 		OpenSurroundingEmptyTiles(fieldSize, tileLoc);
+	}
+}
+void game::SoftForceOpenTile(sf::Vector2i fieldSize, int tileLoc, std::vector<tile*> tiles)
+{
+	if (tiles[tileLoc]->id == 9)
+	{
+		bool previouslyFound = tiles[tileLoc]->revealed;
+		tiles[tileLoc]->revealed = true;
+		if (!previouslyFound)
+		{
+			OpenSurroundingEmptyTiles(fieldSize, tileLoc);
+		}
 	}
 }
