@@ -149,6 +149,15 @@ void tile::onRightClick()
 	}
 }
 
+playButton::playButton()
+{
+	type = "button";
+	texturePath = "../Assets/Button.png";
+}
+void playButton::onLeftClick()
+{
+	gameInst->PlayGame(size, count);
+}
 sf::FloatRect actor::GetRectCollision()
 {
 	sf::IntRect TextRect = sprite.getTextureRect();

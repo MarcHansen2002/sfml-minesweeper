@@ -56,12 +56,17 @@ game::game()
 }
 void game::Init(sf::RenderWindow& window)
 {
-	//Clear all actors and remove them from heap
-	ClearActors();
-	//Adds tiles to scene
-	GenerateField(fieldSize);
-	AddMines(mineCount);
-	SetNumbers(fieldSize);
+	switch (state)
+	{
+	case GameState::menu:
+		InitMenu();
+		break;
+	case GameState::play:
+		InitGame();
+		break;
+	default:
+		break;
+	}
 }
 
 void game::ClearActors()
@@ -74,6 +79,7 @@ void game::ClearActors()
 		//Clear the reference to deleted actor
 		actors[i] = nullptr;
 	}
+	actors.clear();
 }
 
 void game::GenerateField(sf::Vector2i fieldSize)
@@ -99,19 +105,12 @@ void game::GenerateField(sf::Vector2i fieldSize)
 void game::AddMines(int amount)
 {
 	//Get all the tile actors in a vector
-	std::vector<actor*> tiles;
-	for (int i = 0; i < actors.size(); i++)
-	{
-		if (actors[i]->type == "tile")
-		{
-			tiles.push_back(actors[i]);
-		}
-	}
+	std::vector<tile*> tiles = getAllTiles();
 	//Randomly assign bomb ids to some of those tiles
 	for (int i = 0; i < amount; i++)
 	{
 		int selected = rand() % (tiles.size() - 1);
-		dynamic_cast<tile*>(tiles[selected])->id = 11;
+		tiles[selected]->id = 11;
 		tiles.erase(tiles.begin() + selected);
 	}
 }
@@ -319,4 +318,57 @@ void game::MoveBomb(int tileLoc)
 		}
 	}
 	SetNumbers(fieldSize);
+}
+void game::PlayGame(sf::Vector2i size, int count)
+{
+	fieldSize = size;
+	mineCount = count;
+
+	state = play;
+	Init(*windowRef);
+}
+
+void game::InitGame()
+{
+	//Clear all actors and remove them from heap
+	ClearActors();
+	//Adds tiles to scene
+	GenerateField(fieldSize);
+	AddMines(mineCount);
+	SetNumbers(fieldSize);
+}
+void game::InitMenu()
+{
+	ClearActors();
+
+	playButton* easyButton = nullptr;
+	easyButton = new playButton;
+	easyButton->location = { 500, 500 };
+	easyButton->scale = { 3, 3 };
+	easyButton->size = { 9, 9 };
+	easyButton->count = 10;
+	easyButton->gameInst = this;
+	easyButton->Init();
+
+	playButton* normalButton = nullptr;
+	normalButton = new playButton;
+	normalButton->location = { 500, 600 };
+	normalButton->scale = { 3, 3 };
+	normalButton->size = { 16, 16 };
+	normalButton->count = 40;
+	normalButton->gameInst = this;
+	normalButton->Init();
+
+	playButton* hardButton = nullptr;
+	hardButton = new playButton;
+	hardButton->location = { 500, 700 };
+	hardButton->scale = { 3, 3 };
+	hardButton->size = { 30, 16 };
+	hardButton->count = 99;
+	hardButton->gameInst = this;
+	hardButton->Init();
+
+	actors.push_back(easyButton);
+	actors.push_back(normalButton);
+	actors.push_back(hardButton);
 }

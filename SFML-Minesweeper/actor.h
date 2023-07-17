@@ -20,7 +20,7 @@ public:
 	sf::Sprite sprite;
 	SpriteSheet sheetData;
 	sf::Vector2f location;
-	sf::Vector2f scale;
+	sf::Vector2f scale = { 1, 1 };
 	sf::String type = "actor";
 
 	actor();
@@ -48,6 +48,16 @@ public:
 	void Update(float elapsed);
 	void onLeftClick();
 	void onRightClick() override;
+};
+
+class playButton : public actor
+{
+public:
+	playButton();
+	sf::Vector2i size = { 10, 10 };
+	int count = 10;
+
+	void onLeftClick();
 };
 
 bool LoadTexture(const sf::String& file, sf::Texture& texture);

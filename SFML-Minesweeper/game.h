@@ -1,10 +1,15 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "actor.h"
-
+enum GameState
+{
+	menu,
+	play
+};
 class game
 {
 public:
+	GameState state = GameState::menu;
 	bool DebugMode;
 	std::vector<actor*> actors;
 	sf::RenderWindow* windowRef;
@@ -25,7 +30,11 @@ public:
 	void ForceOpenTile(sf::Vector2i fieldSize, int tileLoc, std::vector<tile*> tiles);
 	void SoftForceOpenTile(sf::Vector2i fieldSize, int tileLoc, std::vector<tile*> tiles);
 	void MoveBomb(int tileLoc);
+	void PlayGame(sf::Vector2i fieldSize, int mineCount);
 	std::vector<tile*> getAllTiles();
 	game();
+
+	void InitGame();
+	void InitMenu();
 };
 
