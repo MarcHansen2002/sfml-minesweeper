@@ -49,23 +49,7 @@ int main()
                 {
                     if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
                     {
-                        if (!gameInst.clickedAnywhere)
-                        {
-                            gameInst.clickedAnywhere = true;
-                            if (dynamic_cast<tile*>(hovered)->id == 11)
-                            {
-                                gameInst.MoveBomb(dynamic_cast<tile*>(hovered)->GridLoc);
-                            }
-                        }
                         hovered->onLeftClick();
-                        if (dynamic_cast<tile*>(hovered)->id == 9)
-                        {
-                            gameInst.OpenSurroundingEmptyTiles(gameInst.fieldSize, dynamic_cast<tile*>(hovered)->GridLoc);
-                        }
-                        else if (dynamic_cast<tile*>(hovered)->id < 9)
-                        {
-                            gameInst.CheckForEmpties(gameInst.fieldSize, dynamic_cast<tile*>(hovered)->GridLoc);
-                        }
                     }
                     else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
                     {

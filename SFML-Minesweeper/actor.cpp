@@ -1,4 +1,5 @@
 #include "actor.h"
+#include "game.h"
 #include <assert.h>
 #include <iostream>
 
@@ -36,7 +37,6 @@ void actor::UpdateSprite()
 //When this actor is clicked
 void actor::onLeftClick()
 {
-
 }
 void actor::onRightClick()
 {
@@ -112,6 +112,15 @@ void tile::Update(float elapsed)
 }
 void tile::onLeftClick()
 {
+	//If first tile pressed is bomb, move bomb
+	if (!gameInst->clickedAnywhere)
+	{
+		gameInst->clickedAnywhere = true;
+		if (id == 11)
+		{
+			gameInst->MoveBomb(GridLoc);
+		}
+	}
 	if (!flagged && !revealed)
 	{
 		revealed = true;
@@ -121,7 +130,13 @@ void tile::onLeftClick()
 		}
 		else if (id == 9)
 		{
-			//Empty tile, check surrounding
+			//Empty tile, open surrounding tiles
+			gameInst->OpenSurroundingEmptyTiles(gameInst->fieldSize, GridLoc);
+		}
+		else if (id <= 5)
+		{
+			//If tile has 5 or less bombs around check for empties. Impossible to have any empties if more than 5 bombs surround
+			gameInst->CheckForEmpties(gameInst->fieldSize, GridLoc);
 		}
 	}
 }

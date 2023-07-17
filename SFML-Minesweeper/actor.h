@@ -6,10 +6,12 @@ struct SpriteSheet
 	int rows = 1;
 	int columns = 1;
 };
+class game;
 
 class actor
 {
 public:
+	game *gameInst = nullptr;
 	sf::RenderWindow* windowRef = nullptr;
 	sf::IntRect textRect;
 	sf::IntRect posRect;

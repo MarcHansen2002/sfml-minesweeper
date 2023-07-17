@@ -88,8 +88,8 @@ void game::GenerateField(sf::Vector2i fieldSize)
 			tileObj = new tile;
 
 			//Add the tile to the actors list and initialise it
-			tileObj->id = 1;
 			tileObj->GridLoc = ((1 + i) + (fieldSize.x * x)) - 1;
+			tileObj->gameInst = this;
 			tileObj->Init();
 			tileObj->location = { 100 + (i * (tileObj->textRect.width * tileObj->scale.x)), 100 + (x * (tileObj->textRect.height * tileObj->scale.y)) };
 			actors.push_back(tileObj);
