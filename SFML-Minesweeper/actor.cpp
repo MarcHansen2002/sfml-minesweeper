@@ -35,10 +35,10 @@ void actor::UpdateSprite()
 	posRect.height = location.y + textRect.height / 2.f;
 }
 //When this actor is clicked
-void actor::onLeftClick()
+void actor::OnLeftClick()
 {
 }
-void actor::onRightClick()
+void actor::OnRightClick()
 {
 }
 
@@ -110,13 +110,13 @@ void tile::Update(float elapsed)
 	UpdateSprite();
 
 }
-void tile::onLeftClick()
+void tile::OnLeftClick()
 {
 	//If first tile pressed is bomb, move bomb
 	if (!gameInst->clickedAnywhere)
 	{
 		gameInst->clickedAnywhere = true;
-		gameInst->AddMines(GridLoc);
+		gameInst->AddMines(gridLoc);
 		gameInst->SetNumbers();
 	}
 	if (!flagged && !revealed)
@@ -129,16 +129,16 @@ void tile::onLeftClick()
 		else if (id == 9)
 		{
 			//Empty tile, open surrounding tiles
-			gameInst->OpenSurroundingEmptyTiles(GridLoc);
+			gameInst->OpenSurroundingEmptyTiles(gridLoc);
 		}
 		else if (id <= 5)
 		{
 			//If tile has 5 or less bombs around check for empties. Impossible to have any empties if more than 5 bombs surround
-			gameInst->CheckForEmpties(GridLoc);
+			gameInst->CheckForEmpties(gridLoc);
 		}
 	}
 }
-void tile::onRightClick()
+void tile::OnRightClick()
 {
 	//Change a tile to be flagged if not flagged and vice versa if a tile is not revealed
 	if (!revealed)
@@ -152,7 +152,7 @@ playButton::playButton()
 	type = "button";
 	texturePath = "../Assets/Button.png";
 }
-void playButton::onLeftClick()
+void playButton::OnLeftClick()
 {
 	gameInst->PlayGame(size, count);
 }

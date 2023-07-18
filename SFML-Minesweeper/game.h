@@ -10,7 +10,7 @@ class game
 {
 public:
 	GameState state = GameState::menu;
-	bool DebugMode;
+	bool debugMode;
 	std::vector<actor*> actors;
 	sf::RenderWindow* windowRef = nullptr;
 
@@ -31,6 +31,11 @@ public:
 	void SoftForceOpenTile(int tileLoc, std::vector<tile*> tiles);
 	void MoveBomb(int tileLoc);
 	void PlayGame(sf::Vector2i fieldSize, int mineCount);
+
+	bool TileOnLeft(int tileLoc);
+	bool TileOnTop(int tileLoc);
+	bool TileOnBot(int tileLoc);
+	bool TileOnRight(int tileLoc);
 	std::vector<tile*> getAllTiles();
 	game();
 

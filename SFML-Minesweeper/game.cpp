@@ -44,7 +44,7 @@ void game::Render(sf::RenderWindow& window, float elapsed)
 	{
 		actors[i]->Render(window);
 		//If debug mode is enabled this will draw hitboxes around each actor
-		if (DebugMode)
+		if (debugMode)
 		{
 			actors[i]->DisplayHitbox(*windowRef);
 		}
@@ -53,7 +53,7 @@ void game::Render(sf::RenderWindow& window, float elapsed)
 game::game()
 {
 	windowRef = nullptr;
-	DebugMode = false;
+	debugMode = false;
 }
 void game::Init(sf::RenderWindow& window)
 {
@@ -95,7 +95,7 @@ void game::GenerateField()
 			tileObj = new tile;
 
 			//Add the tile to the actors list and initialise it
-			tileObj->GridLoc = ((1 + i) + (fieldSize.x * x)) - 1;
+			tileObj->gridLoc = ((1 + i) + (fieldSize.x * x)) - 1;
 			tileObj->gameInst = this;
 			tileObj->Init();
 			tileObj->location = { 100 + (i * (tileObj->textRect.width * tileObj->scale.x)), 100 + (x * (tileObj->textRect.height * tileObj->scale.y)) };
@@ -109,52 +109,46 @@ void game::AddMines(int gridLoc)
 	std::vector<tile*> tiles = getAllTiles();
 	std::sort(tiles.begin(), tiles.end(), sortTiles);
 
-	//Check if clicked tile is on any edges
-	bool onLeft = (gridLoc % fieldSize.x == 0); //Checks if tile is on the far left of the field
-	bool onRight = (gridLoc % fieldSize.x == fieldSize.x - 1); //Checks if tile is on the far right of the field
-	bool onTop = (gridLoc / fieldSize.x == 0); // Checks if the tile is on the top of the field
-	bool onBot = (gridLoc / fieldSize.x == fieldSize.y - 1); //Checks if the tile is on the bottom of the field
 	int removable = 1;
 	//Remove clicked tile from spawns
 	tiles[gridLoc] = nullptr;
 	
-	if (!onTop)
+	if (!TileOnTop(gridLoc))
 	{
 		//Remove tile above clicked from spawns
-		//tiles.erase(tiles.begin() + (gridLoc - fieldSize.x));
 		tiles[gridLoc - fieldSize.x] = nullptr;
 		removable++;
-		if (!onLeft)
+		if (!TileOnLeft(gridLoc))
 		{
 			tiles[gridLoc - (fieldSize.x + 1)] = nullptr;
 			removable++;
 		}
-		if (!onRight)
+		if (!TileOnRight(gridLoc))
 		{
 			tiles[gridLoc - (fieldSize.x - 1)] = nullptr;
 			removable++;
 		}
 	}
-	if (!onLeft)
+	if (!TileOnLeft(gridLoc))
 	{
 		tiles[gridLoc - 1] = nullptr;
 		removable++;
 	}
-	if (!onRight)
+	if (!TileOnRight(gridLoc))
 	{
 		tiles[gridLoc + 1] = nullptr;
 		removable++;
 	}
-	if (!onBot)
+	if (!TileOnBot(gridLoc))
 	{
 		tiles[gridLoc + fieldSize.x] = nullptr;
 		removable++;
-		if (!onLeft)
+		if (!TileOnLeft(gridLoc))
 		{
 			tiles[gridLoc + (fieldSize.x - 1)] = nullptr;
 			removable++;
 		}
-		if (!onRight)
+		if (!TileOnRight(gridLoc))
 		{
 			tiles[gridLoc + (fieldSize.x + 1)] = nullptr;
 			removable++;
@@ -194,47 +188,42 @@ void game::SetNumbers()
 		if (tiles[i]->id != 11)
 		{
 			int surrounding = 0;
-			bool onLeft = (i % fieldSize.x == 0); //Checks if tile is on the far left of the field
-			bool onRight = (i % fieldSize.x == fieldSize.x - 1); //Checks if tile is on the far right of the field
-			bool onTop = (i / fieldSize.x == 0); // Checks if the tile is on the top of the field
-			bool onBot = (i / fieldSize.x == fieldSize.y - 1); //Checks if the tile is on the bottom of the field
-
-			if (!onTop)
+			if (!TileOnTop(i))
 			{
 				//Check above tile
 				if (tiles[i - fieldSize.x]->id == 11) { surrounding++; }
 				//Check above left tile
-				if (!onLeft)
+				if (!TileOnLeft(i))
 				{
 					if (tiles[i - (fieldSize.x + 1)]->id == 11) { surrounding++; }
 				}
 				//Check above right tile
-				if (!onRight)
+				if (!TileOnRight(i))
 				{
 					if (tiles[i - (fieldSize.x - 1)]->id == 11) { surrounding++; }
 				}
 			}
-			if (!onLeft)
+			if (!TileOnLeft(i))
 			{
 				//Check left tile
 				if (tiles[i - 1]->id == 11) { surrounding++; }
 			}
-			if (!onRight)
+			if (!TileOnRight(i))
 			{
 				//Check right tile
 				if (tiles[i + 1]->id == 11) { surrounding++; }
 			}
-			if (!onBot)
+			if (!TileOnBot(i))
 			{
 				//Check below tile
 				if (tiles[i + fieldSize.x]->id == 11) { surrounding++; }
 				//Check below left tile
-				if (!onLeft)
+				if (!TileOnLeft(i))
 				{
 					if (tiles[i + (fieldSize.x - 1)]->id == 11) { surrounding++; }
 				}
 				//Check below right tile
-				if (!onRight)
+				if (!TileOnRight(i))
 				{
 					if (tiles[i + (fieldSize.x + 1)]->id == 11) { surrounding++; }
 				}
@@ -258,43 +247,36 @@ void game::CheckForEmpties(int tileLoc)
 	//Sort tiles in order going from top left to top right
 	std::sort(tiles.begin(), tiles.end(), sortTiles);
 
-	//Check if clicked tile is on any edges
-	bool onLeft = (tileLoc % fieldSize.x == 0); //Checks if tile is on the far left of the field
-	bool onRight = (tileLoc % fieldSize.x == fieldSize.x - 1); //Checks if tile is on the far right of the field
-	bool onTop = (tileLoc / fieldSize.x == 0); // Checks if the tile is on the top of the field
-	bool onBot = (tileLoc / fieldSize.x == fieldSize.y - 1); //Checks if the tile is on the bottom of the field
-
-
-	if (!onTop) //Check above
+	if (!TileOnTop(tileLoc)) //Check above
 	{
 		SoftForceOpenTile((tileLoc - fieldSize.x), tiles);
 
-		if (!onLeft) //Check top left
+		if (!TileOnLeft(tileLoc)) //Check top left
 		{
 			SoftForceOpenTile((tileLoc - (fieldSize.x + 1)), tiles);
 		}
-		if (!onRight) //Check top right
+		if (!TileOnRight(tileLoc)) //Check top right
 		{
 			SoftForceOpenTile((tileLoc - (fieldSize.x - 1)), tiles);
 		}
 	}
-	if (!onLeft) //Check left
+	if (!TileOnLeft(tileLoc)) //Check left
 	{
 		SoftForceOpenTile((tileLoc - 1), tiles);
 	}
-	if (!onRight) //Check right
+	if (!TileOnRight(tileLoc)) //Check right
 	{
 		SoftForceOpenTile((tileLoc + 1), tiles);
 	}
-	if (!onBot) //Check below
+	if (!TileOnBot(tileLoc)) //Check below
 	{
 
 		SoftForceOpenTile((tileLoc + fieldSize.x), tiles);
-		if (!onLeft) //Check down left
+		if (!TileOnLeft(tileLoc)) //Check down left
 		{
 			SoftForceOpenTile((tileLoc + (fieldSize.x - 1)), tiles);
 		}
-		if (!onRight) //Check down right
+		if (!TileOnRight(tileLoc)) //Check down right
 		{
 			SoftForceOpenTile((tileLoc + (fieldSize.x + 1)), tiles);
 		}
@@ -306,44 +288,37 @@ void game::OpenSurroundingEmptyTiles(int tileLoc)
 	std::vector<tile*> tiles = getAllTiles();
 	//Sort tiles in order going from top left to top right
 	std::sort(tiles.begin(), tiles.end(), sortTiles);
-
-	//Check if clicked tile is on any edges
-	bool onLeft = (tileLoc % fieldSize.x == 0); //Checks if tile is on the far left of the field
-	bool onRight = (tileLoc % fieldSize.x == fieldSize.x - 1); //Checks if tile is on the far right of the field
-	bool onTop = (tileLoc / fieldSize.x == 0); // Checks if the tile is on the top of the field
-	bool onBot = (tileLoc / fieldSize.x == fieldSize.y - 1); //Checks if the tile is on the bottom of the field
-
 	
-	if (!onTop) //Check above
+	if (!TileOnTop(tileLoc)) //Check above
 	{
 		ForceOpenTile((tileLoc - fieldSize.x), tiles);
 
-		if (!onLeft) //Check top left
+		if (!TileOnLeft(tileLoc)) //Check top left
 		{
 			ForceOpenTile((tileLoc - (fieldSize.x + 1)), tiles);
 		}
-		if (!onRight) //Check top right
+		if (!TileOnRight(tileLoc)) //Check top right
 		{
 			ForceOpenTile((tileLoc - (fieldSize.x - 1)), tiles);
 		}
 	}
-	if (!onLeft) //Check left
+	if (!TileOnLeft(tileLoc)) //Check left
 	{
 		ForceOpenTile((tileLoc - 1), tiles);
 	}
-	if (!onRight) //Check right
+	if (!TileOnRight(tileLoc)) //Check right
 	{
 		ForceOpenTile((tileLoc + 1), tiles);
 	}
-	if (!onBot) //Check below
+	if (!TileOnBot(tileLoc)) //Check below
 	{
 
 		ForceOpenTile((tileLoc + fieldSize.x), tiles);
-		if (!onLeft) //Check down left
+		if (!TileOnLeft(tileLoc)) //Check down left
 		{
 			ForceOpenTile((tileLoc + (fieldSize.x - 1)), tiles);
 		}
-		if (!onRight) //Check down right
+		if (!TileOnRight(tileLoc)) //Check down right
 		{
 			ForceOpenTile((tileLoc + (fieldSize.x + 1)), tiles);
 		}
@@ -393,6 +368,23 @@ void game::PlayGame(sf::Vector2i size, int count)
 
 	state = play;
 	Init(*windowRef);
+}
+
+bool game::TileOnBot(int tileLoc)
+{
+	return (tileLoc / fieldSize.x == fieldSize.y - 1);
+}
+bool game::TileOnLeft(int tileLoc)
+{
+	return (tileLoc % fieldSize.x == 0);
+}
+bool game::TileOnTop(int tileLoc)
+{
+	return (tileLoc / fieldSize.x == 0);
+}
+bool game::TileOnRight(int tileLoc)
+{
+	return (tileLoc % fieldSize.x == fieldSize.x - 1);
 }
 
 void game::InitGame()

@@ -27,35 +27,12 @@ int main()
             {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
                 {
-                    gameInst.DebugMode = !(gameInst.DebugMode);
+                    gameInst.debugMode = !(gameInst.debugMode);
                 }
             }
             if (event.type == sf::Event::MouseButtonPressed)
             {
-                //Check if mouse is colliding with an actor
-                actor* hovered = NULL;
-                bool found = false;
-                for (int i = 0; i < gameInst.actors.size(); i++)
-                {
-                    if (IsMouseColliding(*gameInst.actors[i], window))
-                    {
-                        hovered = gameInst.actors[i];
-                        found = true;
-                        i = gameInst.actors.size() + 1;
-                    }
-                }
-                //If actor is under mouse call left or right click event depending on click
-                if (found)
-                {
-                    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-                    {
-                        hovered->onLeftClick();
-                    }
-                    else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
-                    {
-                        hovered->onRightClick();
-                    }
-                }
+                MouseClick(&gameInst, &window);
             }
         }
    
@@ -74,6 +51,34 @@ int main()
    
     //End
     return 0;
+}
+
+void MouseClick(game* gameInst, sf::RenderWindow* window)
+{
+    //Check if mouse is colliding with an actor
+    actor* hovered = NULL;
+    bool found = false;
+    for (int i = 0; i < gameInst->actors.size(); i++)
+    {
+        if (IsMouseColliding(*gameInst->actors[i], *window))
+        {
+            hovered = gameInst->actors[i];
+            found = true;
+            i = gameInst->actors.size() + 1;
+        }
+    }
+    //If actor is under mouse call left or right click event depending on click
+    if (found)
+    {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
+            hovered->OnLeftClick();
+        }
+        else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+        {
+            hovered->OnRightClick();
+        }
+    }
 }
 
 //TODO

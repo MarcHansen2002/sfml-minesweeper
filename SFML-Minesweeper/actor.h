@@ -26,8 +26,8 @@ public:
 	actor();
 	void Init();
 	void Render(sf::RenderWindow& window);
-	virtual void onLeftClick();
-	virtual void onRightClick();
+	virtual void OnLeftClick();
+	virtual void OnRightClick();
 	void CheckCollisions(sf::RenderWindow& window);
 	virtual void Update(float elapsed);
 	void DisplayHitbox(sf::RenderWindow& window);
@@ -42,12 +42,12 @@ public:
 	bool revealed; //If the tile has been clicked (revealed)
 	bool flagged; //If the tile has been flagged (right clicked)
 	int id; //Type of tile it is: number, bomb, empty
-	int GridLoc; //Location of tile on the grid
+	int gridLoc; //Location of tile on the grid
 
 	tile();
 	void Update(float elapsed);
-	void onLeftClick();
-	void onRightClick() override;
+	void OnLeftClick();
+	void OnRightClick() override;
 };
 
 class playButton : public actor
@@ -57,7 +57,7 @@ public:
 	sf::Vector2i size = { 10, 10 };
 	int count = 10;
 
-	void onLeftClick();
+	void OnLeftClick();
 };
 
 bool LoadTexture(const sf::String& file, sf::Texture& texture);
