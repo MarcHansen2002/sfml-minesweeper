@@ -168,7 +168,7 @@ sf::FloatRect actor::GetRectCollision()
 bool IsMouseColliding(actor& actor, sf::RenderWindow& window)
 {
 	sf::FloatRect actorPos = actor.GetRectCollision();
-	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+	sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 	//Check mouse is not left of actor
 	if (mousePos.x < actorPos.left)
 	{
