@@ -116,10 +116,8 @@ void tile::onLeftClick()
 	if (!gameInst->clickedAnywhere)
 	{
 		gameInst->clickedAnywhere = true;
-		if (id == 11)
-		{
-			gameInst->MoveBomb(GridLoc);
-		}
+		gameInst->AddMines(GridLoc);
+		gameInst->SetNumbers();
 	}
 	if (!flagged && !revealed)
 	{
@@ -131,12 +129,12 @@ void tile::onLeftClick()
 		else if (id == 9)
 		{
 			//Empty tile, open surrounding tiles
-			gameInst->OpenSurroundingEmptyTiles(gameInst->fieldSize, GridLoc);
+			gameInst->OpenSurroundingEmptyTiles(GridLoc);
 		}
 		else if (id <= 5)
 		{
 			//If tile has 5 or less bombs around check for empties. Impossible to have any empties if more than 5 bombs surround
-			gameInst->CheckForEmpties(gameInst->fieldSize, GridLoc);
+			gameInst->CheckForEmpties(GridLoc);
 		}
 	}
 }

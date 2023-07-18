@@ -52,6 +52,7 @@ void game::Render(sf::RenderWindow& window, float elapsed)
 }
 game::game()
 {
+	windowRef = nullptr;
 	DebugMode = false;
 }
 void game::Init(sf::RenderWindow& window)
@@ -82,7 +83,7 @@ void game::ClearActors()
 	actors.clear();
 }
 
-void game::GenerateField(sf::Vector2i fieldSize)
+void game::GenerateField()
 {
 	//Loop through X and Y of the grid and instantiate a tile for each location
 	for (int i = 0; i < fieldSize.x; i++)
@@ -102,19 +103,85 @@ void game::GenerateField(sf::Vector2i fieldSize)
 		}
 	}
 }
-void game::AddMines(int amount)
+void game::AddMines(int gridLoc)
 {
 	//Get all the tile actors in a vector
 	std::vector<tile*> tiles = getAllTiles();
+	std::sort(tiles.begin(), tiles.end(), sortTiles);
+
+	//Check if clicked tile is on any edges
+	bool onLeft = (gridLoc % fieldSize.x == 0); //Checks if tile is on the far left of the field
+	bool onRight = (gridLoc % fieldSize.x == fieldSize.x - 1); //Checks if tile is on the far right of the field
+	bool onTop = (gridLoc / fieldSize.x == 0); // Checks if the tile is on the top of the field
+	bool onBot = (gridLoc / fieldSize.x == fieldSize.y - 1); //Checks if the tile is on the bottom of the field
+	int removable = 1;
+	//Remove clicked tile from spawns
+	tiles[gridLoc] = nullptr;
+	
+	if (!onTop)
+	{
+		//Remove tile above clicked from spawns
+		//tiles.erase(tiles.begin() + (gridLoc - fieldSize.x));
+		tiles[gridLoc - fieldSize.x] = nullptr;
+		removable++;
+		if (!onLeft)
+		{
+			tiles[gridLoc - (fieldSize.x + 1)] = nullptr;
+			removable++;
+		}
+		if (!onRight)
+		{
+			tiles[gridLoc - (fieldSize.x - 1)] = nullptr;
+			removable++;
+		}
+	}
+	if (!onLeft)
+	{
+		tiles[gridLoc - 1] = nullptr;
+		removable++;
+	}
+	if (!onRight)
+	{
+		tiles[gridLoc + 1] = nullptr;
+		removable++;
+	}
+	if (!onBot)
+	{
+		tiles[gridLoc + fieldSize.x] = nullptr;
+		removable++;
+		if (!onLeft)
+		{
+			tiles[gridLoc + (fieldSize.x - 1)] = nullptr;
+			removable++;
+		}
+		if (!onRight)
+		{
+			tiles[gridLoc + (fieldSize.x + 1)] = nullptr;
+			removable++;
+		}
+	}
+	for (int i = 0; i < tiles.size(); i++)
+	{
+		if (tiles[i] == nullptr)
+		{
+			tiles.erase(tiles.begin() + i);
+			i--;
+			removable--;
+			if (removable <= 0)
+			{
+				i = tiles.size() + 1;
+			}
+		}
+	}
 	//Randomly assign bomb ids to some of those tiles
-	for (int i = 0; i < amount; i++)
+	for (int i = 0; i < mineCount; i++)
 	{
 		int selected = rand() % (tiles.size() - 1);
 		tiles[selected]->id = 11;
 		tiles.erase(tiles.begin() + selected);
 	}
 }
-void game::SetNumbers(sf::Vector2i fieldSize)
+void game::SetNumbers()
 {
 	std::vector<tile*> tiles = getAllTiles();
 
@@ -184,7 +251,7 @@ void game::SetNumbers(sf::Vector2i fieldSize)
 		}
 	}
 }
-void game::CheckForEmpties(sf::Vector2i fieldSize, int tileLoc)
+void game::CheckForEmpties(int tileLoc)
 {
 	//Get all the tile actors in a vector
 	std::vector<tile*> tiles = getAllTiles();
@@ -200,40 +267,40 @@ void game::CheckForEmpties(sf::Vector2i fieldSize, int tileLoc)
 
 	if (!onTop) //Check above
 	{
-		SoftForceOpenTile(fieldSize, (tileLoc - fieldSize.x), tiles);
+		SoftForceOpenTile((tileLoc - fieldSize.x), tiles);
 
 		if (!onLeft) //Check top left
 		{
-			SoftForceOpenTile(fieldSize, (tileLoc - (fieldSize.x + 1)), tiles);
+			SoftForceOpenTile((tileLoc - (fieldSize.x + 1)), tiles);
 		}
 		if (!onRight) //Check top right
 		{
-			SoftForceOpenTile(fieldSize, (tileLoc - (fieldSize.x - 1)), tiles);
+			SoftForceOpenTile((tileLoc - (fieldSize.x - 1)), tiles);
 		}
 	}
 	if (!onLeft) //Check left
 	{
-		SoftForceOpenTile(fieldSize, (tileLoc - 1), tiles);
+		SoftForceOpenTile((tileLoc - 1), tiles);
 	}
 	if (!onRight) //Check right
 	{
-		SoftForceOpenTile(fieldSize, (tileLoc + 1), tiles);
+		SoftForceOpenTile((tileLoc + 1), tiles);
 	}
 	if (!onBot) //Check below
 	{
 
-		SoftForceOpenTile(fieldSize, (tileLoc + fieldSize.x), tiles);
+		SoftForceOpenTile((tileLoc + fieldSize.x), tiles);
 		if (!onLeft) //Check down left
 		{
-			SoftForceOpenTile(fieldSize, (tileLoc + (fieldSize.x - 1)), tiles);
+			SoftForceOpenTile((tileLoc + (fieldSize.x - 1)), tiles);
 		}
 		if (!onRight) //Check down right
 		{
-			SoftForceOpenTile(fieldSize, (tileLoc + (fieldSize.x + 1)), tiles);
+			SoftForceOpenTile((tileLoc + (fieldSize.x + 1)), tiles);
 		}
 	}
 }
-void game::OpenSurroundingEmptyTiles(sf::Vector2i fieldSize, int tileLoc)
+void game::OpenSurroundingEmptyTiles(int tileLoc)
 {
 	//Get all the tile actors in a vector
 	std::vector<tile*> tiles = getAllTiles();
@@ -249,49 +316,49 @@ void game::OpenSurroundingEmptyTiles(sf::Vector2i fieldSize, int tileLoc)
 	
 	if (!onTop) //Check above
 	{
-		ForceOpenTile(fieldSize, (tileLoc - fieldSize.x), tiles);
+		ForceOpenTile((tileLoc - fieldSize.x), tiles);
 
 		if (!onLeft) //Check top left
 		{
-			ForceOpenTile(fieldSize, (tileLoc - (fieldSize.x + 1)), tiles);
+			ForceOpenTile((tileLoc - (fieldSize.x + 1)), tiles);
 		}
 		if (!onRight) //Check top right
 		{
-			ForceOpenTile(fieldSize, (tileLoc - (fieldSize.x - 1)), tiles);
+			ForceOpenTile((tileLoc - (fieldSize.x - 1)), tiles);
 		}
 	}
 	if (!onLeft) //Check left
 	{
-		ForceOpenTile(fieldSize, (tileLoc - 1), tiles);
+		ForceOpenTile((tileLoc - 1), tiles);
 	}
 	if (!onRight) //Check right
 	{
-		ForceOpenTile(fieldSize, (tileLoc + 1), tiles);
+		ForceOpenTile((tileLoc + 1), tiles);
 	}
 	if (!onBot) //Check below
 	{
 
-		ForceOpenTile(fieldSize, (tileLoc + fieldSize.x), tiles);
+		ForceOpenTile((tileLoc + fieldSize.x), tiles);
 		if (!onLeft) //Check down left
 		{
-			ForceOpenTile(fieldSize, (tileLoc + (fieldSize.x - 1)), tiles);
+			ForceOpenTile((tileLoc + (fieldSize.x - 1)), tiles);
 		}
 		if (!onRight) //Check down right
 		{
-			ForceOpenTile(fieldSize, (tileLoc + (fieldSize.x + 1)), tiles);
+			ForceOpenTile((tileLoc + (fieldSize.x + 1)), tiles);
 		}
 	}
 }
-void game::ForceOpenTile(sf::Vector2i fieldSize, int tileLoc, std::vector<tile*> tiles)
+void game::ForceOpenTile(int tileLoc, std::vector<tile*> tiles)
 {
 	bool previouslyFound = tiles[tileLoc]->revealed;
 	tiles[tileLoc]->revealed = true;
 	if ((tiles[tileLoc]->id == 9) && (!previouslyFound))
 	{
-		OpenSurroundingEmptyTiles(fieldSize, tileLoc);
+		OpenSurroundingEmptyTiles(tileLoc);
 	}
 }
-void game::SoftForceOpenTile(sf::Vector2i fieldSize, int tileLoc, std::vector<tile*> tiles)
+void game::SoftForceOpenTile(int tileLoc, std::vector<tile*> tiles)
 {
 	if (tiles[tileLoc]->id == 9)
 	{
@@ -299,7 +366,7 @@ void game::SoftForceOpenTile(sf::Vector2i fieldSize, int tileLoc, std::vector<ti
 		tiles[tileLoc]->revealed = true;
 		if (!previouslyFound)
 		{
-			OpenSurroundingEmptyTiles(fieldSize, tileLoc);
+			OpenSurroundingEmptyTiles(tileLoc);
 		}
 	}
 }
@@ -317,7 +384,7 @@ void game::MoveBomb(int tileLoc)
 			i = tiles.size() + 1;
 		}
 	}
-	SetNumbers(fieldSize);
+	SetNumbers();
 }
 void game::PlayGame(sf::Vector2i size, int count)
 {
@@ -333,9 +400,7 @@ void game::InitGame()
 	//Clear all actors and remove them from heap
 	ClearActors();
 	//Adds tiles to scene
-	GenerateField(fieldSize);
-	AddMines(mineCount);
-	SetNumbers(fieldSize);
+	GenerateField();
 }
 void game::InitMenu()
 {
