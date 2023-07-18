@@ -2,7 +2,6 @@
 #include "game.h"
 #include <assert.h>
 #include <iostream>
-
 //Constructor
 actor::actor()
 {
@@ -40,6 +39,10 @@ void actor::OnLeftClick()
 }
 void actor::OnRightClick()
 {
+}
+void actor::OnMiddleClick()
+{
+
 }
 
 void actor::CheckCollisions(sf::RenderWindow& window)
@@ -144,6 +147,66 @@ void tile::OnRightClick()
 	if (!revealed)
 	{
 		flagged = !flagged;
+	}
+}
+void tile::OnMiddleClick()
+{
+	if (revealed)
+	{
+		//Get all tiles and sort them
+		std::vector<tile*> tiles = gameInst->getAllTiles(true);
+		//Get all tiles surrounding clicked tile
+		std::vector<tile*> surrounding;
+		int flaggedAmount = 0;
+		if (!gameInst->TileOnTop(gridLoc))
+		{
+			surrounding.push_back(tiles[gridLoc - (gameInst->fieldSize.x)]);
+			if (!gameInst->TileOnLeft(gridLoc))
+			{
+				surrounding.push_back(tiles[gridLoc - (gameInst->fieldSize.x + 1)]);
+			}
+			if (!gameInst->TileOnRight(gridLoc))
+			{
+				surrounding.push_back(tiles[gridLoc - (gameInst->fieldSize.x - 1)]);
+			}
+		}
+		if (!gameInst->TileOnLeft(gridLoc))
+		{
+			surrounding.push_back(tiles[gridLoc - 1]);
+		}
+		if (!gameInst->TileOnRight(gridLoc))
+		{
+			surrounding.push_back(tiles[gridLoc + 1]);
+		}
+		if (!gameInst->TileOnBot(gridLoc))
+		{
+			surrounding.push_back(tiles[gridLoc + (gameInst->fieldSize.x)]);
+			if (!gameInst->TileOnLeft(gridLoc))
+			{
+				surrounding.push_back(tiles[gridLoc + (gameInst->fieldSize.x - 1)]);
+			}
+			if (!gameInst->TileOnRight(gridLoc))
+			{
+				surrounding.push_back(tiles[gridLoc + (gameInst->fieldSize.x + 1)]);
+			}
+		}
+		//Check the amount of flagged tiles around clicked tile
+		for (int i = 0; i < surrounding.size(); i++)
+		{
+			if (surrounding[i]->flagged)
+			{
+				flaggedAmount++;
+			}
+		}
+		//If amount of touching flags = id then open all surrounding tiles
+		if (flaggedAmount == id)
+		{
+			//Loop through surrounding tiles
+			for (int i = 0; i < surrounding.size(); i++)
+			{
+				surrounding[i]->OnLeftClick();
+			}
+		}
 	}
 }
 

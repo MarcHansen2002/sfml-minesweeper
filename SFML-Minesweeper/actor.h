@@ -28,6 +28,7 @@ public:
 	void Render(sf::RenderWindow& window);
 	virtual void OnLeftClick();
 	virtual void OnRightClick();
+	virtual void OnMiddleClick();
 	void CheckCollisions(sf::RenderWindow& window);
 	virtual void Update(float elapsed);
 	void DisplayHitbox(sf::RenderWindow& window);
@@ -46,8 +47,9 @@ public:
 
 	tile();
 	void Update(float elapsed);
-	void OnLeftClick();
+	void OnLeftClick() override;
 	void OnRightClick() override;
+	void OnMiddleClick() override;
 };
 
 class playButton : public actor

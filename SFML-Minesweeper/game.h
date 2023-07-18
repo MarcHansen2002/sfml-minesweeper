@@ -36,7 +36,7 @@ public:
 	bool TileOnTop(int tileLoc);
 	bool TileOnBot(int tileLoc);
 	bool TileOnRight(int tileLoc);
-	std::vector<tile*> getAllTiles();
+	std::vector<tile*> getAllTiles(bool sort = false);
 	game();
 
 	void InitGame();

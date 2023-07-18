@@ -26,6 +26,10 @@ void MouseClick(game* gameInst, sf::RenderWindow* window)
         {
             hovered->OnRightClick();
         }
+        else if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+        {
+            hovered->OnMiddleClick();
+        }
     }
 }
 

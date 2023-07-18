@@ -14,7 +14,7 @@ bool sortTiles(actor* a, actor* b)
 		return (a->location.x < b->location.x);
 	}
 }
-std::vector<tile*> game::getAllTiles()
+std::vector<tile*> game::getAllTiles(bool sort)
 {
 	//Get all the tile actors in a vector
 	std::vector<tile*> tiles;
@@ -24,6 +24,11 @@ std::vector<tile*> game::getAllTiles()
 		{
 			tiles.push_back(dynamic_cast<tile*>(actors[i]));
 		}
+	}
+
+	if (sort)
+	{
+		std::sort(tiles.begin(), tiles.end(), sortTiles);
 	}
 	return tiles;
 }
