@@ -87,4 +87,10 @@ int main()
 
 
 //TODO
-//Middle mouse button
+//End game on win / loss
+//UI [unflagged mines remaining, time, background]
+//Center minesweeper grids
+//Background for menu screen
+//Include mySQL and make top times saved
+
+//End goal: Portfolio piece with git shown on site. Build game for itch.io and ask for feedback from minesweeper subreddit

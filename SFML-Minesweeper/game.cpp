@@ -41,6 +41,14 @@ void game::Update(sf::RenderWindow& window, float elapsed)
 		actors[i]->CheckCollisions(window);
 		actors[i]->Update(elapsed);
 	}
+	for (int i = 0; i < uiActors.size(); i++)
+	{
+		uiActors[i]->Update(elapsed);
+	}
+	if (clickedAnywhere)
+	{
+		time += elapsed;
+	}
 }
 void game::Render(sf::RenderWindow& window, float elapsed)
 {
@@ -53,6 +61,10 @@ void game::Render(sf::RenderWindow& window, float elapsed)
 		{
 			actors[i]->DisplayHitbox(*windowRef);
 		}
+	}
+	for (int i = 0; i < uiActors.size(); i++)
+	{
+		uiActors[i]->Render(window);
 	}
 }
 game::game()
@@ -332,7 +344,7 @@ void game::OpenSurroundingEmptyTiles(int tileLoc)
 void game::ForceOpenTile(int tileLoc, std::vector<tile*> tiles)
 {
 	bool previouslyFound = tiles[tileLoc]->revealed;
-	tiles[tileLoc]->revealed = true;
+	tiles[tileLoc]->OnLeftClick();
 	if ((tiles[tileLoc]->id == 9) && (!previouslyFound))
 	{
 		OpenSurroundingEmptyTiles(tileLoc);
@@ -343,7 +355,7 @@ void game::SoftForceOpenTile(int tileLoc, std::vector<tile*> tiles)
 	if (tiles[tileLoc]->id == 9)
 	{
 		bool previouslyFound = tiles[tileLoc]->revealed;
-		tiles[tileLoc]->revealed = true;
+		tiles[tileLoc]->OnLeftClick();
 		if (!previouslyFound)
 		{
 			OpenSurroundingEmptyTiles(tileLoc);
@@ -370,6 +382,10 @@ void game::PlayGame(sf::Vector2i size, int count)
 {
 	fieldSize = size;
 	mineCount = count;
+
+	tilesToWin = (fieldSize.x * fieldSize.y) - mineCount;
+	time = 0.f;
+	remainingFlags = mineCount;
 
 	state = play;
 	Init(*windowRef);
@@ -398,6 +414,22 @@ void game::InitGame()
 	ClearActors();
 	//Adds tiles to scene
 	GenerateField();
+
+	timer* gameTimer = nullptr;
+	gameTimer = new timer;
+	gameTimer->location = { 500, 50 };
+	gameTimer->scale = { 3, 3 };
+	gameTimer->gameInst = this;
+	gameTimer->Init();
+	uiActors.push_back(gameTimer);
+	
+	flagCount* flagCounter = nullptr;
+	flagCounter = new flagCount;
+	flagCounter->location = { 400, 50 };
+	flagCounter->scale = { 3, 3 };
+	flagCounter->gameInst = this;
+	flagCounter->Init();
+	uiActors.push_back(flagCounter);
 }
 void game::InitMenu()
 {
@@ -433,4 +465,13 @@ void game::InitMenu()
 	actors.push_back(easyButton);
 	actors.push_back(normalButton);
 	actors.push_back(hardButton);
+}
+
+void game::GameOver()
+{
+
+}
+void game::GameWin()
+{
+
 }

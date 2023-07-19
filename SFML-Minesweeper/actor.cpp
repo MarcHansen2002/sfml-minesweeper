@@ -128,6 +128,8 @@ void tile::OnLeftClick()
 		if (id == 11)
 		{
 			//End Game, mine clicked
+			//Gameinst.gameover()
+			return;
 		}
 		else if (id == 9)
 		{
@@ -139,6 +141,12 @@ void tile::OnLeftClick()
 			//If tile has 5 or less bombs around check for empties. Impossible to have any empties if more than 5 bombs surround
 			gameInst->CheckForEmpties(gridLoc);
 		}
+		gameInst->tilesToWin--;
+
+		if (gameInst->tilesToWin <= 0)
+		{
+			//Win gamehere
+		}
 	}
 }
 void tile::OnRightClick()
@@ -146,6 +154,14 @@ void tile::OnRightClick()
 	//Change a tile to be flagged if not flagged and vice versa if a tile is not revealed
 	if (!revealed)
 	{
+		if (flagged)
+		{
+			gameInst->remainingFlags++;
+		}
+		else
+		{
+			gameInst->remainingFlags--;
+		}
 		flagged = !flagged;
 	}
 }
@@ -265,4 +281,47 @@ bool LoadTexture(const sf::String& file, sf::Texture& texture)
 	}
 	assert(false);
 	return false;
+}
+
+timer::timer()
+{
+	type = "ui";
+	texturePath = "../Assets/Button.png";
+	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
+	{
+		assert(false);
+	}
+}
+void timer::Render(sf::RenderWindow& window)
+{
+	window.draw(sprite);
+	sf::Text text;
+	text.setString(std::to_string(gameInst->time));
+	text.setFont(font);
+	text.setFillColor(sf::Color::White);
+	text.setCharacterSize(24);
+	text.setOrigin(textRect.width / 2, textRect.height / 2);
+	text.setPosition(location);
+	window.draw(text);
+}
+flagCount::flagCount()
+{
+	type = "ui";
+	texturePath = "../Assets/Button.png";
+	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
+	{
+		assert(false);
+	}
+}
+void flagCount::Render(sf::RenderWindow& window)
+{
+	window.draw(sprite);
+	sf::Text text;
+	text.setString(std::to_string(gameInst->remainingFlags));
+	text.setFont(font);
+	text.setFillColor(sf::Color::White);
+	text.setCharacterSize(24);
+	text.setOrigin(textRect.width / 2, textRect.height / 2);
+	text.setPosition(location);
+	window.draw(text);
 }

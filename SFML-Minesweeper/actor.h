@@ -25,7 +25,7 @@ public:
 
 	actor();
 	void Init();
-	void Render(sf::RenderWindow& window);
+	virtual void Render(sf::RenderWindow& window);
 	virtual void OnLeftClick();
 	virtual void OnRightClick();
 	virtual void OnMiddleClick();
@@ -61,6 +61,23 @@ public:
 
 	void OnLeftClick();
 };
+
+class timer : public actor
+{
+public:
+	sf::Font font;
+	timer();
+	void Render(sf::RenderWindow& window);
+};
+class flagCount : public actor
+{
+public:
+	sf::Font font;
+
+	flagCount();
+	void Render(sf::RenderWindow& window);
+};
+
 
 bool LoadTexture(const sf::String& file, sf::Texture& texture);
 bool IsMouseColliding(actor& actor, sf::RenderWindow& window);
