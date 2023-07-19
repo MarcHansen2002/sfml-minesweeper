@@ -2,6 +2,8 @@
 #include "game.h"
 #include <assert.h>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 //Constructor
 actor::actor()
 {
@@ -286,7 +288,7 @@ bool LoadTexture(const sf::String& file, sf::Texture& texture)
 timer::timer()
 {
 	type = "ui";
-	texturePath = "../Assets/Button.png";
+	texturePath = "../Assets/TimeDisplay.png";
 	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
 	{
 		assert(false);
@@ -296,18 +298,23 @@ void timer::Render(sf::RenderWindow& window)
 {
 	window.draw(sprite);
 	sf::Text text;
-	text.setString(std::to_string(gameInst->time));
+
+	std::stringstream stream;
+	float time = gameInst->time;
+	stream << std::fixed << std::setprecision(2) << time;
+
+	text.setString(stream.str());
 	text.setFont(font);
-	text.setFillColor(sf::Color::White);
+	text.setFillColor(sf::Color::Black);
 	text.setCharacterSize(24);
 	text.setOrigin(textRect.width / 2, textRect.height / 2);
-	text.setPosition(location);
+	text.setPosition(location.x - 40, location.y-5);
 	window.draw(text);
 }
 flagCount::flagCount()
 {
 	type = "ui";
-	texturePath = "../Assets/Button.png";
+	texturePath = "../Assets/FlagDisplay.png";
 	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
 	{
 		assert(false);
@@ -317,11 +324,12 @@ void flagCount::Render(sf::RenderWindow& window)
 {
 	window.draw(sprite);
 	sf::Text text;
+
 	text.setString(std::to_string(gameInst->remainingFlags));
 	text.setFont(font);
-	text.setFillColor(sf::Color::White);
+	text.setFillColor(sf::Color::Black);
 	text.setCharacterSize(24);
 	text.setOrigin(textRect.width / 2, textRect.height / 2);
-	text.setPosition(location);
+	text.setPosition(location.x - 40, location.y-5);
 	window.draw(text);
 }

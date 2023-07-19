@@ -417,7 +417,7 @@ void game::InitGame()
 
 	timer* gameTimer = nullptr;
 	gameTimer = new timer;
-	gameTimer->location = { 500, 50 };
+	gameTimer->location = { 600, 50 };
 	gameTimer->scale = { 3, 3 };
 	gameTimer->gameInst = this;
 	gameTimer->Init();
