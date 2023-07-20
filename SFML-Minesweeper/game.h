@@ -31,19 +31,19 @@ public:
 	void SetNumbers();
 	void OpenSurroundingEmptyTiles(int tileLoc);
 	void CheckForEmpties(int tileLoc);
-	void ForceOpenTile(int tileLoc, std::vector<tile*> tiles);
-	void SoftForceOpenTile(int tileLoc, std::vector<tile*> tiles);
-	void MoveBomb(int tileLoc);
 	void PlayGame(sf::Vector2i fieldSize, int mineCount);
 
 	void GameWin();
 	void GameOver();
 
+	std::vector<tile*> GetSurroundingTiles(int tileLoc);
+	std::vector<tile*> GetSurroundingTiles(int tileLoc, std::vector<tile*> tiles);
+
 	bool TileOnLeft(int tileLoc);
 	bool TileOnTop(int tileLoc);
 	bool TileOnBot(int tileLoc);
 	bool TileOnRight(int tileLoc);
-	std::vector<tile*> getAllTiles(bool sort = false);
+	std::vector<tile*> GetAllTiles(bool sort = false);
 	game();
 
 	void InitGame();

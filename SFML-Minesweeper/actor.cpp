@@ -127,6 +127,7 @@ void tile::OnLeftClick()
 	if (!flagged && !revealed)
 	{
 		revealed = true;
+
 		if (id == 11)
 		{
 			//End Game, mine clicked
@@ -144,7 +145,7 @@ void tile::OnLeftClick()
 			gameInst->CheckForEmpties(gridLoc);
 		}
 		gameInst->tilesToWin--;
-
+		
 		if (gameInst->tilesToWin <= 0)
 		{
 			//Win gamehere
@@ -172,7 +173,7 @@ void tile::OnMiddleClick()
 	if (revealed)
 	{
 		//Get all tiles and sort them
-		std::vector<tile*> tiles = gameInst->getAllTiles(true);
+		std::vector<tile*> tiles = gameInst->GetAllTiles(true);
 		//Get all tiles surrounding clicked tile
 		std::vector<tile*> surrounding;
 		int flaggedAmount = 0;

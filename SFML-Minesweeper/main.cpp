@@ -84,11 +84,8 @@ int main()
     return 0;
 }
 
-
-
 //TODO
 //End game on win / loss
-//UI [unflagged mines remaining, time, background]
 //Center minesweeper grids
 //Background for menu screen
 //Include mySQL and make top times saved
