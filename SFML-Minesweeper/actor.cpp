@@ -137,12 +137,12 @@ void tile::OnLeftClick()
 		else if (id == 9)
 		{
 			//Empty tile, open surrounding tiles
-			gameInst->OpenSurroundingEmptyTiles(gridLoc);
+			gameInst->OpenSurroundingTiles(gridLoc);
 		}
 		else if (id <= 5)
 		{
 			//If tile has 5 or less bombs around check for empties. Impossible to have any empties if more than 5 bombs surround
-			gameInst->CheckForEmpties(gridLoc);
+			gameInst->OpenSurroundingEmpties(gridLoc);
 		}
 		gameInst->tilesToWin--;
 		

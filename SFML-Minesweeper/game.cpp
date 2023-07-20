@@ -277,7 +277,7 @@ void game::SetNumbers() //Calculate how many bombs are around each tile and set 
 		}
 	}
 }
-void game::CheckForEmpties(int tileLoc) //Open all surrounding tiles if they're empty
+void game::OpenSurroundingEmpties(int tileLoc) //Open all surrounding tiles if they're empty
 {
 	//Get all surrounding tiles
 	std::vector<tile*> surrounding = GetSurroundingTiles(tileLoc);
@@ -291,7 +291,7 @@ void game::CheckForEmpties(int tileLoc) //Open all surrounding tiles if they're 
 		}
 	}
 }
-void game::OpenSurroundingEmptyTiles(int tileLoc) //Open all surrounding tiles no matter what
+void game::OpenSurroundingTiles(int tileLoc) //Open all surrounding tiles no matter what
 {
 	//Get all surrounding tiles
 	std::vector<tile*> surrounding = GetSurroundingTiles(tileLoc);

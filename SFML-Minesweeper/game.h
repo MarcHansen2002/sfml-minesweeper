@@ -29,8 +29,8 @@ public:
 	void GenerateField();
 	void AddMines(int gridLoc);
 	void SetNumbers();
-	void OpenSurroundingEmptyTiles(int tileLoc);
-	void CheckForEmpties(int tileLoc);
+	void OpenSurroundingTiles(int tileLoc);
+	void OpenSurroundingEmpties(int tileLoc);
 	void PlayGame(sf::Vector2i fieldSize, int mineCount);
 
 	void GameWin();
