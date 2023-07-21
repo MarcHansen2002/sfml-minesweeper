@@ -4,12 +4,13 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
-//Constructor
+
+// ===================================================================== BASE ACTOR
 actor::actor()
 {
 
 }
-//Initialise actor after the constructor
+//Required
 void actor::Init()
 {
 	LoadTexture(texturePath, texture);
@@ -21,6 +22,12 @@ void actor::Init()
 void actor::Render(sf::RenderWindow& window)
 {
 	window.draw(sprite); //Draws actor's sprite
+}
+void actor::Update(float elapsed)
+{
+	//Update an actor's location and scale
+	sprite.setPosition(location);
+	sprite.setScale(scale);
 }
 void actor::UpdateSprite()
 {
@@ -35,7 +42,7 @@ void actor::UpdateSprite()
 	posRect.top = location.y - textRect.height / 2.f;
 	posRect.height = location.y + textRect.height / 2.f;
 }
-//When this actor is clicked
+//Click Events
 void actor::OnLeftClick()
 {
 }
@@ -47,14 +54,15 @@ void actor::OnMiddleClick()
 
 }
 
-void actor::CheckCollisions(sf::RenderWindow& window)
+//Collision
+sf::FloatRect actor::GetRectCollision()
 {
-}
-void actor::Update(float elapsed)
-{
-	//Update an actor's location and scale
-	sprite.setPosition(location);
-	sprite.setScale(scale);
+	sf::IntRect TextRect = sprite.getTextureRect();
+	sf::FloatRect PositionalRect = { location.x - ((TextRect.width / 2.f) * scale.x), //Left
+		location.y - ((TextRect.height / 2.f) * scale.y), //Top
+		((float)TextRect.width) * scale.x, //Right
+		((float)TextRect.height) * scale.y }; //Bottom
+	return PositionalRect;
 }
 void actor::DisplayHitbox(sf::RenderWindow& window)
 {
@@ -82,20 +90,22 @@ void actor::DisplayTextureRect(sf::RenderWindow& window)
 	box.setOutlineThickness(5);
 	window.draw(box);
 }
+//===================================================================== BASE ACTOR
 
 
+//===================================================================== TILE
 tile::tile()
 {
 	type = "tile";
 	texturePath = "../Assets/SweeperSheet.png";
 	scale = { 2, 2 };
 	sheetData.columns = 3;
-	sheetData.rows = 4;
+	sheetData.rows = 5;
 
 	revealed = false;
 	flagged = false;
 }
-
+//Required
 void tile::Update(float elapsed)
 {
 	//Change the sprite used on the texture depending on the state of a tile
@@ -115,8 +125,14 @@ void tile::Update(float elapsed)
 	UpdateSprite();
 
 }
+//Click Events
 void tile::OnLeftClick()
 {
+	if (!gameInst->canClick)
+	{
+		//Cancels event if canClick is false
+		return;
+	}
 	//If first tile pressed is bomb, move bomb
 	if (!gameInst->clickedAnywhere)
 	{
@@ -124,21 +140,26 @@ void tile::OnLeftClick()
 		gameInst->AddMines(gridLoc);
 		gameInst->SetNumbers();
 	}
+	//Logic for any click after starting
 	if (!flagged && !revealed)
 	{
 		revealed = true;
-
+		//Mine pressed
 		if (id == 11)
 		{
-			//End Game, mine clicked
-			//Gameinst.gameover()
+			//Set tile to clicked mine sprite
+			id = 15;
+			//End game with a loss
+			gameInst->GameOver();
 			return;
 		}
+		//Empty pressed
 		else if (id == 9)
 		{
 			//Empty tile, open surrounding tiles
 			gameInst->OpenSurroundingTiles(gridLoc);
 		}
+		//Number under 6 pressed
 		else if (id <= 5)
 		{
 			//If tile has 5 or less bombs around check for empties. Impossible to have any empties if more than 5 bombs surround
@@ -146,14 +167,20 @@ void tile::OnLeftClick()
 		}
 		gameInst->tilesToWin--;
 		
+		//Last tile pressed
 		if (gameInst->tilesToWin <= 0)
 		{
-			//Win gamehere
+			gameInst->GameWin();
 		}
 	}
 }
 void tile::OnRightClick()
 {
+	//Cancel event if canClick is false
+	if (!gameInst->canClick)
+	{
+		return;
+	}
 	//Change a tile to be flagged if not flagged and vice versa if a tile is not revealed
 	if (!revealed)
 	{
@@ -170,6 +197,11 @@ void tile::OnRightClick()
 }
 void tile::OnMiddleClick()
 {
+	//Cancel event if canClick is false
+	if (!gameInst->canClick)
+	{
+		return;
+	}
 	if (revealed)
 	{
 		//Get all tiles and sort them
@@ -228,25 +260,75 @@ void tile::OnMiddleClick()
 		}
 	}
 }
+//===================================================================== TILE
 
+
+//===================================================================== PLAY BUTTON
 playButton::playButton()
 {
 	type = "button";
 	texturePath = "../Assets/Button.png";
 }
+//Click Events
 void playButton::OnLeftClick()
 {
 	gameInst->PlayGame(size, count);
 }
-sf::FloatRect actor::GetRectCollision()
+//===================================================================== PLAY BUTTON
+
+
+//===================================================================== TIMER & FLAG COUNT
+timer::timer()
 {
-	sf::IntRect TextRect = sprite.getTextureRect();
-	sf::FloatRect PositionalRect = { location.x - ((TextRect.width / 2.f) * scale.x), //Left
-		location.y - ((TextRect.height / 2.f) * scale.y), //Top
-		((float)TextRect.width) * scale.x, //Right
-		((float)TextRect.height) * scale.y }; //Bottom
-	return PositionalRect;
-}	
+	type = "ui";
+	texturePath = "../Assets/TimeDisplay.png";
+	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
+	{
+		assert(false);
+	}
+}
+void timer::Render(sf::RenderWindow& window)
+{
+	window.draw(sprite);
+	sf::Text text;
+
+	std::stringstream stream;
+	float time = gameInst->time;
+	stream << std::fixed << std::setprecision(2) << time;
+
+	text.setString(stream.str());
+	text.setFont(font);
+	text.setFillColor(sf::Color::Black);
+	text.setCharacterSize(24);
+	text.setOrigin(textRect.width / 2, textRect.height / 2);
+	text.setPosition(location.x - 40, location.y-5);
+	window.draw(text);
+}
+
+flagCount::flagCount()
+{
+	type = "ui";
+	texturePath = "../Assets/FlagDisplay.png";
+	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
+	{
+		assert(false);
+	}
+}
+void flagCount::Render(sf::RenderWindow& window)
+{
+	window.draw(sprite);
+	sf::Text text;
+
+	text.setString(std::to_string(gameInst->remainingFlags));
+	text.setFont(font);
+	text.setFillColor(sf::Color::Black);
+	text.setCharacterSize(24);
+	text.setOrigin(textRect.width / 2, textRect.height / 2);
+	text.setPosition(location.x - 40, location.y-5);
+	window.draw(text);
+}
+//===================================================================== TIMER & FLAG COUNT
+
 bool IsMouseColliding(actor& actor, sf::RenderWindow& window)
 {
 	sf::FloatRect actorPos = actor.GetRectCollision();
@@ -284,53 +366,4 @@ bool LoadTexture(const sf::String& file, sf::Texture& texture)
 	}
 	assert(false);
 	return false;
-}
-
-timer::timer()
-{
-	type = "ui";
-	texturePath = "../Assets/TimeDisplay.png";
-	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
-	{
-		assert(false);
-	}
-}
-void timer::Render(sf::RenderWindow& window)
-{
-	window.draw(sprite);
-	sf::Text text;
-
-	std::stringstream stream;
-	float time = gameInst->time;
-	stream << std::fixed << std::setprecision(2) << time;
-
-	text.setString(stream.str());
-	text.setFont(font);
-	text.setFillColor(sf::Color::Black);
-	text.setCharacterSize(24);
-	text.setOrigin(textRect.width / 2, textRect.height / 2);
-	text.setPosition(location.x - 40, location.y-5);
-	window.draw(text);
-}
-flagCount::flagCount()
-{
-	type = "ui";
-	texturePath = "../Assets/FlagDisplay.png";
-	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
-	{
-		assert(false);
-	}
-}
-void flagCount::Render(sf::RenderWindow& window)
-{
-	window.draw(sprite);
-	sf::Text text;
-
-	text.setString(std::to_string(gameInst->remainingFlags));
-	text.setFont(font);
-	text.setFillColor(sf::Color::Black);
-	text.setCharacterSize(24);
-	text.setOrigin(textRect.width / 2, textRect.height / 2);
-	text.setPosition(location.x - 40, location.y-5);
-	window.draw(text);
 }

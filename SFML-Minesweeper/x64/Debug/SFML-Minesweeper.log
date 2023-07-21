@@ -1,1 +1,8 @@
-﻿  SFML-Minesweeper.vcxproj -> C:\Users\Marc\source\repos\SFML-Minesweeper\x64\Debug\SFML-Minesweeper.exe
+﻿  game.cpp
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(219,40): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(231,25): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  main.cpp
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\main.cpp(15,44): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\main.cpp(41,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating Code...
+  SFML-Minesweeper.vcxproj -> C:\Users\Marc\source\repos\SFML-Minesweeper\x64\Debug\SFML-Minesweeper.exe

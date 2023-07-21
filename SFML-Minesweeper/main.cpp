@@ -85,7 +85,7 @@ int main()
 }
 
 //TODO
-//End game on win / loss
+//Button to restart or return to menu after win / loss
 //Center minesweeper grids
 //Background for menu screen
 //Include mySQL and make top times saved

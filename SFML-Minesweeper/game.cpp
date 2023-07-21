@@ -1,6 +1,5 @@
 #include "game.h"
 #include <iostream>
-
 bool SortTiles(actor* a, actor* b)
 {
 	//Return A if A is above B
@@ -14,112 +13,31 @@ bool SortTiles(actor* a, actor* b)
 		return (a->location.x < b->location.x);
 	}
 }
-std::vector<tile*> game::GetAllTiles(bool sort)
+//Required
+game::game()
 {
-	//Get all the tile actors in a vector
-	std::vector<tile*> tiles;
-	for (int i = 0; i < actors.size(); i++)
-	{
-		if (actors[i]->type == "tile")
-		{
-			tiles.push_back(dynamic_cast<tile*>(actors[i]));
-		}
-	}
-
-	if (sort)
-	{
-		std::sort(tiles.begin(), tiles.end(), SortTiles);
-	}
-	return tiles;
+	windowRef = nullptr;
+	debugMode = false;
 }
-std::vector<tile*> game::GetSurroundingTiles(int tileLoc) //Gets all surrounding tiles
+void game::Init(sf::RenderWindow& window)
 {
-	std::vector<tile*> tiles = GetAllTiles(true);
-	std::vector<tile*> surrounding;
-	if (!TileOnTop(tileLoc)) //Check above
+	switch (state)
 	{
-		surrounding.push_back(tiles[tileLoc - fieldSize.x]);
-
-		if (!TileOnLeft(tileLoc)) //Check top left
-		{
-			surrounding.push_back(tiles[tileLoc - (fieldSize.x + 1)]);
-		}
-		if (!TileOnRight(tileLoc)) //Check top right
-		{
-			surrounding.push_back(tiles[tileLoc - (fieldSize.x - 1)]);
-		}
+	case GameState::menu:
+		InitMenu();
+		break;
+	case GameState::play:
+		InitGame();
+		break;
+	default:
+		break;
 	}
-	if (!TileOnLeft(tileLoc)) //Check left
-	{
-		surrounding.push_back(tiles[tileLoc - 1]);
-	}
-	if (!TileOnRight(tileLoc)) //Check right
-	{
-		surrounding.push_back(tiles[tileLoc + 1]);
-	}
-	if (!TileOnBot(tileLoc)) //Check below
-	{
-
-		surrounding.push_back(tiles[tileLoc + fieldSize.x]);
-		if (!TileOnLeft(tileLoc)) //Check down left
-		{
-			surrounding.push_back(tiles[tileLoc + (fieldSize.x - 1)]);
-		}
-		if (!TileOnRight(tileLoc)) //Check down right
-		{
-			surrounding.push_back(tiles[tileLoc + (fieldSize.x + 1)]);
-		}
-	}
-
-	return surrounding;
 }
-std::vector<tile*> game::GetSurroundingTiles(int tileLoc, std::vector<tile*> tiles) //Gets all surrounding tiles but doesn't fetch each tile everytime
-{
-	std::vector<tile*> surrounding;
-	if (!TileOnTop(tileLoc)) //Check above
-	{
-		surrounding.push_back(tiles[tileLoc - fieldSize.x]);
-
-		if (!TileOnLeft(tileLoc)) //Check top left
-		{
-			surrounding.push_back(tiles[tileLoc - (fieldSize.x + 1)]);
-		}
-		if (!TileOnRight(tileLoc)) //Check top right
-		{
-			surrounding.push_back(tiles[tileLoc - (fieldSize.x - 1)]);
-		}
-	}
-	if (!TileOnLeft(tileLoc)) //Check left
-	{
-		surrounding.push_back(tiles[tileLoc - 1]);
-	}
-	if (!TileOnRight(tileLoc)) //Check right
-	{
-		surrounding.push_back(tiles[tileLoc + 1]);
-	}
-	if (!TileOnBot(tileLoc)) //Check below
-	{
-
-		surrounding.push_back(tiles[tileLoc + fieldSize.x]);
-		if (!TileOnLeft(tileLoc)) //Check down left
-		{
-			surrounding.push_back(tiles[tileLoc + (fieldSize.x - 1)]);
-		}
-		if (!TileOnRight(tileLoc)) //Check down right
-		{
-			surrounding.push_back(tiles[tileLoc + (fieldSize.x + 1)]);
-		}
-	}
-
-	return surrounding;
-}
-
 void game::Update(sf::RenderWindow& window, float elapsed)
 {
 	//Loop through actor list, check collisions and update
 	for (int i = 0; i < actors.size(); i++)
 	{
-		actors[i]->CheckCollisions(window);
 		actors[i]->Update(elapsed);
 	}
 	for (int i = 0; i < uiActors.size(); i++)
@@ -148,25 +66,6 @@ void game::Render(sf::RenderWindow& window, float elapsed)
 		uiActors[i]->Render(window);
 	}
 }
-game::game()
-{
-	windowRef = nullptr;
-	debugMode = false;
-}
-void game::Init(sf::RenderWindow& window)
-{
-	switch (state)
-	{
-	case GameState::menu:
-		InitMenu();
-		break;
-	case GameState::play:
-		InitGame();
-		break;
-	default:
-		break;
-	}
-}
 
 void game::ClearActors()
 {
@@ -181,6 +80,7 @@ void game::ClearActors()
 	actors.clear();
 }
 
+//Minesweeper Related
 void game::GenerateField() //Creates a grid of tiles size depending on fieldSize variable
 {
 	//Loop through X and Y of the grid and instantiate a tile for each location
@@ -314,7 +214,106 @@ void game::PlayGame(sf::Vector2i size, int count)
 	state = play;
 	Init(*windowRef);
 }
+std::vector<tile*> game::GetAllTiles(bool sort)
+{
+	//Get all the tile actors in a vector
+	std::vector<tile*> tiles;
+	for (int i = 0; i < actors.size(); i++)
+	{
+		if (actors[i]->type == "tile")
+		{
+			tiles.push_back(dynamic_cast<tile*>(actors[i]));
+		}
+	}
 
+	if (sort)
+	{
+		std::sort(tiles.begin(), tiles.end(), SortTiles);
+	}
+	return tiles;
+}
+std::vector<tile*> game::GetSurroundingTiles(int tileLoc) //Gets all surrounding tiles
+{
+	std::vector<tile*> tiles = GetAllTiles(true);
+	std::vector<tile*> surrounding;
+	if (!TileOnTop(tileLoc)) //Check above
+	{
+		surrounding.push_back(tiles[tileLoc - fieldSize.x]);
+
+		if (!TileOnLeft(tileLoc)) //Check top left
+		{
+			surrounding.push_back(tiles[tileLoc - (fieldSize.x + 1)]);
+		}
+		if (!TileOnRight(tileLoc)) //Check top right
+		{
+			surrounding.push_back(tiles[tileLoc - (fieldSize.x - 1)]);
+		}
+	}
+	if (!TileOnLeft(tileLoc)) //Check left
+	{
+		surrounding.push_back(tiles[tileLoc - 1]);
+	}
+	if (!TileOnRight(tileLoc)) //Check right
+	{
+		surrounding.push_back(tiles[tileLoc + 1]);
+	}
+	if (!TileOnBot(tileLoc)) //Check below
+	{
+
+		surrounding.push_back(tiles[tileLoc + fieldSize.x]);
+		if (!TileOnLeft(tileLoc)) //Check down left
+		{
+			surrounding.push_back(tiles[tileLoc + (fieldSize.x - 1)]);
+		}
+		if (!TileOnRight(tileLoc)) //Check down right
+		{
+			surrounding.push_back(tiles[tileLoc + (fieldSize.x + 1)]);
+		}
+	}
+
+	return surrounding;
+}
+std::vector<tile*> game::GetSurroundingTiles(int tileLoc, std::vector<tile*> tiles) //Gets all surrounding tiles but doesn't fetch each tile everytime
+{
+	std::vector<tile*> surrounding;
+	if (!TileOnTop(tileLoc)) //Check above
+	{
+		surrounding.push_back(tiles[tileLoc - fieldSize.x]);
+
+		if (!TileOnLeft(tileLoc)) //Check top left
+		{
+			surrounding.push_back(tiles[tileLoc - (fieldSize.x + 1)]);
+		}
+		if (!TileOnRight(tileLoc)) //Check top right
+		{
+			surrounding.push_back(tiles[tileLoc - (fieldSize.x - 1)]);
+		}
+	}
+	if (!TileOnLeft(tileLoc)) //Check left
+	{
+		surrounding.push_back(tiles[tileLoc - 1]);
+	}
+	if (!TileOnRight(tileLoc)) //Check right
+	{
+		surrounding.push_back(tiles[tileLoc + 1]);
+	}
+	if (!TileOnBot(tileLoc)) //Check below
+	{
+
+		surrounding.push_back(tiles[tileLoc + fieldSize.x]);
+		if (!TileOnLeft(tileLoc)) //Check down left
+		{
+			surrounding.push_back(tiles[tileLoc + (fieldSize.x - 1)]);
+		}
+		if (!TileOnRight(tileLoc)) //Check down right
+		{
+			surrounding.push_back(tiles[tileLoc + (fieldSize.x + 1)]);
+		}
+	}
+
+	return surrounding;
+}
+//Tile Location Checking
 bool game::TileOnBot(int tileLoc)
 {
 	return (tileLoc / fieldSize.x == fieldSize.y - 1);
@@ -331,11 +330,45 @@ bool game::TileOnRight(int tileLoc)
 {
 	return (tileLoc % fieldSize.x == fieldSize.x - 1);
 }
+//Game Ending
+void game::GameOver()
+{
+	canClick = false;
+	clickedAnywhere = false;
 
+	std::vector<tile*> tiles = GetAllTiles();
+	for (int i = 0; i < tiles.size(); i++)
+	{
+		//Correctly flagged bomb
+		if ((tiles[i]->id == 11) && (tiles[i]->flagged))
+		{
+			tiles[i]->id = 14;
+			tiles[i]->revealed = true;
+		}
+		//Incorrectly flagged bomb
+		else if ((tiles[i]->id != 11) && (tiles[i]->flagged))
+		{
+			tiles[i]->id = 13;
+			tiles[i]->revealed = true;
+		}
+		//Revealed bomb
+		else if ((tiles[i]->id == 11) && (!tiles[i]->revealed))
+		{
+			tiles[i]->revealed = true;
+		}
+	}
+}
+void game::GameWin()
+{
+	canClick = false;
+	clickedAnywhere = false;
+}
+//Scene Initialising
 void game::InitGame()
 {
 	//Clear all actors and remove them from heap
 	ClearActors();
+
 	//Adds tiles to scene
 	GenerateField();
 
@@ -346,7 +379,7 @@ void game::InitGame()
 	gameTimer->gameInst = this;
 	gameTimer->Init();
 	uiActors.push_back(gameTimer);
-	
+
 	flagCount* flagCounter = nullptr;
 	flagCounter = new flagCount;
 	flagCounter->location = { 400, 50 };
@@ -361,7 +394,7 @@ void game::InitMenu()
 
 	playButton* easyButton = nullptr;
 	easyButton = new playButton;
-	easyButton->location = { windowRef->getSize().x / 2.f, 500};
+	easyButton->location = { windowRef->getSize().x / 2.f, 500 };
 	easyButton->scale = { 3, 3 };
 	easyButton->size = { 9, 9 };
 	easyButton->count = 10;
@@ -389,13 +422,4 @@ void game::InitMenu()
 	actors.push_back(easyButton);
 	actors.push_back(normalButton);
 	actors.push_back(hardButton);
-}
-
-void game::GameOver()
-{
-
-}
-void game::GameWin()
-{
-
 }
