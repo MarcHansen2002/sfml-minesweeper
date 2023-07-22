@@ -134,6 +134,28 @@ tile::tile()
 	flagged = false;
 }
 //Required
+void tile::Init()
+{
+	actor::Init();
+
+	origin = { 0, 0 };
+	//Get pixel size of one tile
+	int sizeX, sizeY, i, x;
+	sf::FloatRect size = GetRectCollision();
+	sizeX = size.width - size.left;
+	sizeY = size.height - size.top;
+
+	//Get location of top left of where grid should be to be centered
+	sf::Vector2f startLoc;
+	startLoc.x = (gameInst->resolution.x / 2.f) - ((sizeX * gameInst->fieldSize.x) / 2.f);
+	startLoc.y = (gameInst->resolution.y / 2.f) - ((sizeY * gameInst->fieldSize.y) / 2.f);
+
+	//Set tile location within centered grid location
+	i = gridLoc % gameInst->fieldSize.x;
+	x = gridLoc / gameInst->fieldSize.x;
+	location = { startLoc.x + (i * (textRect.width * scale.x)), startLoc.y + (x * (textRect.height * scale.y)) };
+	
+}
 void tile::Update(float elapsed)
 {
 	//Change the sprite used on the texture depending on the state of a tile
@@ -356,6 +378,14 @@ void flagCount::Render(sf::RenderWindow& window)
 	window.draw(text);
 }
 //===================================================================== TIMER & FLAG COUNT
+
+
+background::background(sf::String TextPath)
+{
+	texturePath = TextPath;
+	origin = { 0, 0 };
+	stretchScale = true;
+}
 
 bool IsMouseColliding(actor& actor, sf::RenderWindow& window)
 {

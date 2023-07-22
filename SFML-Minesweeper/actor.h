@@ -16,6 +16,7 @@ public:
 	//References
 	game *gameInst = nullptr; //Reference to the game object
 	sf::RenderWindow* windowRef = nullptr; //Reference to the rendered window
+	int zLayer = 1;
 
 	//Texture
 	sf::IntRect textRect; //Displayed part of texture
@@ -34,7 +35,7 @@ public:
 	//Functions
 	actor();
 	//Required
-	void Init();
+	virtual void Init();
 	virtual void Update(float elapsed);
 	void UpdateSprite();
 	virtual void Render(sf::RenderWindow& window);
@@ -62,6 +63,7 @@ public:
 	//Functions
 	tile();
 	//Required
+	void Init() override;
 	void Update(float elapsed);
 
 	//Click Events
@@ -101,6 +103,13 @@ public:
 	//Functions
 	flagCount();
 	void Render(sf::RenderWindow& window);
+};
+
+class background : public actor
+{
+public:
+	//Function
+	background(sf::String TextPath);
 };
 
 bool LoadTexture(const sf::String& file, sf::Texture& texture);

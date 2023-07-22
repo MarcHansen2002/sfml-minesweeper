@@ -13,6 +13,10 @@ bool SortTiles(actor* a, actor* b)
 		return (a->location.x < b->location.x);
 	}
 }
+bool sortZlayer(actor* a, actor* b)
+{
+	return (a->zLayer < b->zLayer);
+}
 //Required
 game::game()
 {
@@ -51,22 +55,37 @@ void game::Update(sf::RenderWindow& window, float elapsed)
 }
 void game::Render(sf::RenderWindow& window, float elapsed)
 {
-	//Loop through all actors and draw them to window
-	for (int i = 0; i < actors.size(); i++)
+	//Loop through list of every actor and draw them in order of their z layer (higher z = on top)
+	std::sort(allActors.begin(), allActors.end(), sortZlayer);
+	for (int i = 0; i < allActors.size(); i++)
 	{
-		actors[i]->Render(window);
-		//If debug mode is enabled this will draw hitboxes around each actor
-		if (debugMode)
+		allActors[i]->Render(window);
+	}
+	//If debugmode is active, loop through all collidable actors and draw hitboxes
+	if (debugMode)
+	{
+		for (int i = 0; i < actors.size(); i++)
 		{
 			actors[i]->DisplayHitbox(*windowRef);
 		}
 	}
-	for (int i = 0; i < uiActors.size(); i++)
-	{
-		uiActors[i]->Render(window);
-	}
+	
 }
 
+void game::AddActor(actor* actor, bool collidable)
+{
+	actor->gameInst = this;
+	actor->Init();
+	if (collidable)
+	{
+		actors.push_back(actor);
+	}
+	else
+	{
+		uiActors.push_back(actor);
+	}
+	allActors.push_back(actor);
+}
 void game::ClearActors()
 {
 	//Loops through all actors
@@ -78,6 +97,15 @@ void game::ClearActors()
 		actors[i] = nullptr;
 	}
 	actors.clear();
+	//Loops through all uiActors
+	for (int i = 0; i < uiActors.size(); i++)
+	{
+		delete uiActors[i];
+		uiActors[i] = nullptr;
+	}
+	uiActors.clear();
+	//Clear list of all actors
+	allActors.clear();
 }
 
 //Minesweeper Related
@@ -94,10 +122,7 @@ void game::GenerateField() //Creates a grid of tiles size depending on fieldSize
 
 			//Add the tile to the actors list and initialise it
 			tileObj->gridLoc = ((1 + i) + (fieldSize.x * x)) - 1;
-			tileObj->gameInst = this;
-			tileObj->Init();
-			tileObj->location = { 100 + (i * (tileObj->textRect.width * tileObj->scale.x)), 100 + (x * (tileObj->textRect.height * tileObj->scale.y)) };
-			actors.push_back(tileObj);
+			AddActor(tileObj);
 		}
 	}
 }
@@ -369,6 +394,12 @@ void game::InitGame()
 	//Clear all actors and remove them from heap
 	ClearActors();
 
+	//Create background object
+	background* BG = nullptr;
+	BG = new background("../Assets/SweeperBG.png");
+	BG->zLayer = 0;
+	AddActor(BG, false);
+
 	//Adds tiles to scene
 	GenerateField();
 
@@ -376,17 +407,13 @@ void game::InitGame()
 	gameTimer = new timer;
 	gameTimer->location = { 600, 50 };
 	gameTimer->scale = { 3, 3 };
-	gameTimer->gameInst = this;
-	gameTimer->Init();
-	uiActors.push_back(gameTimer);
+	AddActor(gameTimer, false);
 
 	flagCount* flagCounter = nullptr;
 	flagCounter = new flagCount;
 	flagCounter->location = { 400, 50 };
 	flagCounter->scale = { 3, 3 };
-	flagCounter->gameInst = this;
-	flagCounter->Init();
-	uiActors.push_back(flagCounter);
+	AddActor(flagCounter, false);
 }
 void game::InitMenu()
 {
@@ -398,8 +425,7 @@ void game::InitMenu()
 	easyButton->scale = { 3, 3 };
 	easyButton->size = { 9, 9 };
 	easyButton->count = 10;
-	easyButton->gameInst = this;
-	easyButton->Init();
+	AddActor(easyButton);
 	
 	playButton* normalButton = nullptr;
 	normalButton = new playButton;
@@ -407,8 +433,7 @@ void game::InitMenu()
 	normalButton->scale = { 3, 3 };
 	normalButton->size = { 16, 16 };
 	normalButton->count = 40;
-	normalButton->gameInst = this;
-	normalButton->Init();
+	AddActor(normalButton);
 
 	playButton* hardButton = nullptr;
 	hardButton = new playButton;
@@ -416,10 +441,5 @@ void game::InitMenu()
 	hardButton->scale = { 3, 3 };
 	hardButton->size = { 30, 16 };
 	hardButton->count = 99;
-	hardButton->gameInst = this;
-	hardButton->Init();
-
-	actors.push_back(easyButton);
-	actors.push_back(normalButton);
-	actors.push_back(hardButton);
+	AddActor(hardButton);
 }

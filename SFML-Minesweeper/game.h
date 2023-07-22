@@ -20,6 +20,7 @@ public:
 	//Actors
 	std::vector<actor*> actors; //Objects within the game
 	std::vector<actor*> uiActors; //Same as actors however not checked for collisions
+	std::vector<actor*> allActors; //List of all actors combined to draw in order of zlayer
 	
 	//Minesweeper Related
 	int tilesToWin;
@@ -37,6 +38,8 @@ public:
 	void Render(sf::RenderWindow& window, float elapsed); //Called every frame to draw all actors
 	void Init(sf::RenderWindow& window); //Initialise the main game
 
+	//Actor Handling
+	void AddActor(actor* actor, bool collidable = true); //Inits and adds an actor to vectors
 	void ClearActors(); //Clears all the actors and removes them from the heap
 
 	//Minesweeper related
