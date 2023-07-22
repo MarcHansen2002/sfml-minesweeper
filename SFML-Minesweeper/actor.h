@@ -26,7 +26,9 @@ public:
 	SpriteSheet sheetData;
 
 	sf::Vector2f location;
-	sf::Vector2f scale = { 1, 1 };
+	sf::Vector2f origin = { 0.5, 0.5 };
+	bool stretchScale = false;
+	sf::Vector2f scale = { 1, 1 }; //Change to vector2i and have bool for stretch scale. Stretch scale scales to % of screen, false is regular
 	sf::String type = "actor";
 
 	//Functions

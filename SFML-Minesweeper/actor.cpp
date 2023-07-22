@@ -13,6 +13,8 @@ actor::actor()
 //Required
 void actor::Init()
 {
+	windowRef = gameInst->windowRef;
+
 	LoadTexture(texturePath, texture);
 	sprite.setTexture(texture);
 
@@ -27,14 +29,25 @@ void actor::Update(float elapsed)
 {
 	//Update an actor's location and scale
 	sprite.setPosition(location);
-	sprite.setScale(scale);
+	//Scale to a percent of screen
+	if (stretchScale)
+	{
+		sf::Vector2f scaleSize = { (gameInst->resolution.x * scale.x) / textRect.width, (gameInst->resolution.y * scale.y) / textRect.height };
+		sprite.setScale(scaleSize);
+	}
+	//Regularly scale off vector
+	else
+	{
+		sprite.setScale(scale);
+	}
+	
 }
 void actor::UpdateSprite()
 {
 	//Set sprite to a small section of the texture to allow for sprite sheets
 	textRect = sf::IntRect(((sheetData.index - 1) % sheetData.columns) * texture.getSize().x / sheetData.columns, ((sheetData.index - 1) / sheetData.columns) * texture.getSize().y / sheetData.rows, texture.getSize().x / sheetData.columns, texture.getSize().y / sheetData.rows);
 	//Set origin to the centre of the actor and set the sprite's texture
-	sprite.setOrigin(textRect.width / 2.f, textRect.height / 2.f);
+	sprite.setOrigin((textRect.width / (1.f / origin.x)), (textRect.height / (1.f / origin.y)));
 	sprite.setTextureRect(textRect);
 
 	posRect.left = location.x - textRect.width / 2.f;
@@ -58,10 +71,25 @@ void actor::OnMiddleClick()
 sf::FloatRect actor::GetRectCollision()
 {
 	sf::IntRect TextRect = sprite.getTextureRect();
-	sf::FloatRect PositionalRect = { location.x - ((TextRect.width / 2.f) * scale.x), //Left
-		location.y - ((TextRect.height / 2.f) * scale.y), //Top
-		((float)TextRect.width) * scale.x, //Right
-		((float)TextRect.height) * scale.y }; //Bottom
+	float xScale = 1, yScale = 1;
+	if (stretchScale)
+	{
+		xScale = (gameInst->resolution.x * scale.x) / textRect.width;
+		yScale = (gameInst->resolution.y * scale.y) / textRect.height;
+	}
+	else
+	{
+		xScale = scale.x;
+		yScale = scale.y;
+	}
+
+	sf::FloatRect PositionalRect;
+	PositionalRect.left = location.x - ((TextRect.width / (1.f / origin.x)) * xScale);
+	PositionalRect.top = location.y - ((TextRect.height / (1.f / origin.y)) * yScale);
+	PositionalRect.width = ((float)TextRect.width) * xScale;
+	PositionalRect.height = ((float)TextRect.height) * yScale;
+	
+
 	return PositionalRect;
 }
 void actor::DisplayHitbox(sf::RenderWindow& window)

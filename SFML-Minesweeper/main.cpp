@@ -40,6 +40,7 @@ int main()
     
     srand(time(NULL));
     game gameInst;
+    gameInst.resolution = { 1600, 900 };
     gameInst.windowRef = &window;
     gameInst.Init(window);
 
@@ -89,5 +90,7 @@ int main()
 //Center minesweeper grids
 //Background for menu screen
 //Include mySQL and make top times saved
+//Z-layers
+//Stretch scale
 
 //End goal: Portfolio piece with git shown on site. Build game for itch.io and ask for feedback from minesweeper subreddit

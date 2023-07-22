@@ -12,6 +12,7 @@ public:
 	//Variables
 	GameState state = GameState::menu;
 	bool debugMode;
+	sf::Vector2f resolution;
 
 	//References
 	sf::RenderWindow* windowRef = nullptr;

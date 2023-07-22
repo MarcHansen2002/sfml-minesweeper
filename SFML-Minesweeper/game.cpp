@@ -400,7 +400,7 @@ void game::InitMenu()
 	easyButton->count = 10;
 	easyButton->gameInst = this;
 	easyButton->Init();
-
+	
 	playButton* normalButton = nullptr;
 	normalButton = new playButton;
 	normalButton->location = { windowRef->getSize().x / 2.f, 600 };
