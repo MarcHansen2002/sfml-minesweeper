@@ -126,7 +126,7 @@ tile::tile()
 {
 	type = "tile";
 	texturePath = "../Assets/SweeperSheet.png";
-	scale = { 2, 2 };
+	scale = { 2.8, 2.8 };
 	sheetData.columns = 3;
 	sheetData.rows = 5;
 
@@ -153,7 +153,7 @@ void tile::Init()
 	//Set tile location within centered grid location
 	i = gridLoc % gameInst->fieldSize.x;
 	x = gridLoc / gameInst->fieldSize.x;
-	location = { startLoc.x + (i * (textRect.width * scale.x)), startLoc.y + (x * (textRect.height * scale.y)) };
+	location = { startLoc.x + (i * (textRect.width * scale.x)), 58 + startLoc.y + (x * (textRect.height * scale.y)) };
 	
 }
 void tile::Update(float elapsed)
