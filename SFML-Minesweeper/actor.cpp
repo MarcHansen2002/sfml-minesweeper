@@ -29,18 +29,9 @@ void actor::Update(float elapsed)
 {
 	//Update an actor's location and scale
 	sprite.setPosition(location);
-	//Scale to a percent of screen
-	if (stretchScale)
-	{
-		sf::Vector2f scaleSize = { (gameInst->resolution.x * scale.x) / textRect.width, (gameInst->resolution.y * scale.y) / textRect.height };
-		sprite.setScale(scaleSize);
-	}
-	//Regularly scale off vector
-	else
-	{
-		sprite.setScale(scale);
-	}
-	
+	//Scale the sprite
+	sf::Vector2f scaleSize = GetScale();
+	sprite.setScale(scaleSize);
 }
 void actor::UpdateSprite()
 {
@@ -49,11 +40,50 @@ void actor::UpdateSprite()
 	//Set origin to the centre of the actor and set the sprite's texture
 	sprite.setOrigin((textRect.width / (1.f / origin.x)), (textRect.height / (1.f / origin.y)));
 	sprite.setTextureRect(textRect);
+}
 
-	posRect.left = location.x - textRect.width / 2.f;
-	posRect.width = location.x + textRect.width / 2.f;
-	posRect.top = location.y - textRect.height / 2.f;
-	posRect.height = location.y + textRect.height / 2.f;
+sf::Vector2f actor::GetScale()
+{
+	sf::Vector2f scaleSize = { 1, 1 };
+	switch (scaleType)
+	{
+	case normal:
+		scaleSize = scale;
+		break;
+	case stretch:
+		scaleSize = { (gameInst->resolution.x * scale.x) / textRect.width, (gameInst->resolution.y * scale.y) / textRect.height };
+		break;
+	case pixel:
+		scaleSize;
+		//Returns a default value if both values are 0
+		if ((scale.x <= 0) && (scale.y <= 0))
+		{
+			scaleSize = { 1, 1 };
+		}
+		else
+		{
+			if (scale.x <= 0)
+			{
+				scaleSize.x = (scale.y / (float)textRect.height);
+				scaleSize.y = (scale.y / (float)textRect.height);
+			}
+			else if (scale.y <= 0)
+			{
+				scaleSize.x = (scale.x / (float)textRect.width);
+				scaleSize.y = (scale.x / (float)textRect.width);
+			}
+			else
+			{
+				scaleSize.x = (scale.x / (float)textRect.width);
+				scaleSize.y = (scale.y / (float)textRect.height);
+			}
+		}
+		break;
+	default:
+		scaleSize = scale;
+		break;
+	}
+	return scaleSize;
 }
 //Click Events
 void actor::OnLeftClick()
@@ -71,25 +101,14 @@ void actor::OnMiddleClick()
 sf::FloatRect actor::GetRectCollision()
 {
 	sf::IntRect TextRect = sprite.getTextureRect();
-	float xScale = 1, yScale = 1;
-	if (stretchScale)
-	{
-		xScale = (gameInst->resolution.x * scale.x) / textRect.width;
-		yScale = (gameInst->resolution.y * scale.y) / textRect.height;
-	}
-	else
-	{
-		xScale = scale.x;
-		yScale = scale.y;
-	}
-
+	sf::Vector2f scaleVal = GetScale();
 	sf::FloatRect PositionalRect;
-	PositionalRect.left = location.x - ((TextRect.width / (1.f / origin.x)) * xScale);
-	PositionalRect.top = location.y - ((TextRect.height / (1.f / origin.y)) * yScale);
-	PositionalRect.width = ((float)TextRect.width) * xScale;
-	PositionalRect.height = ((float)TextRect.height) * yScale;
-	
 
+	PositionalRect.left = location.x - ((TextRect.width / (1.f / origin.x)) * scaleVal.x);
+	PositionalRect.top = location.y - ((TextRect.height / (1.f / origin.y)) * scaleVal.y);
+	PositionalRect.width = ((float)TextRect.width) * scaleVal.x;
+	PositionalRect.height = ((float)TextRect.height) * scaleVal.y;
+	
 	return PositionalRect;
 }
 void actor::DisplayHitbox(sf::RenderWindow& window)
@@ -384,7 +403,7 @@ background::background(sf::String TextPath)
 {
 	texturePath = TextPath;
 	origin = { 0, 0 };
-	stretchScale = true;
+	scaleType = stretch;
 }
 
 bool IsMouseColliding(actor& actor, sf::RenderWindow& window)

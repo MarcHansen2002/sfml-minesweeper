@@ -1,5 +1,12 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+
+enum ScaleMode
+{
+	normal, //Scales by a vector multiplied
+	stretch, //Scales to a percent of the resolution
+	pixel //Scales to an amount of pixels. If x OR y is 0 or less they will be scaled equally with the non-0 axis
+};
 //Sprite sheet data
 struct SpriteSheet
 {
@@ -20,7 +27,6 @@ public:
 
 	//Texture
 	sf::IntRect textRect; //Displayed part of texture
-	sf::IntRect posRect; //Rect of where actor is
 	sf::Texture texture; //Loaded texture from texturePath
 	sf::String texturePath; //Directory of texture
 	sf::Sprite sprite;
@@ -28,7 +34,7 @@ public:
 
 	sf::Vector2f location;
 	sf::Vector2f origin = { 0.5, 0.5 };
-	bool stretchScale = false;
+	ScaleMode scaleType = normal;
 	sf::Vector2f scale = { 1, 1 }; //Change to vector2i and have bool for stretch scale. Stretch scale scales to % of screen, false is regular
 	sf::String type = "actor";
 
@@ -40,6 +46,8 @@ public:
 	void UpdateSprite();
 	virtual void Render(sf::RenderWindow& window);
 
+
+	sf::Vector2f GetScale();
 	//Click Events
 	virtual void OnLeftClick();
 	virtual void OnRightClick();
