@@ -332,18 +332,7 @@ void tile::OnMiddleClick()
 //===================================================================== TILE
 
 
-//===================================================================== PLAY BUTTON
-playButton::playButton()
-{
-	type = "button";
-	texturePath = "../Assets/Button.png";
-}
-//Click Events
-void playButton::OnLeftClick()
-{
-	gameInst->PlayGame(size, count);
-}
-//===================================================================== PLAY BUTTON
+
 
 
 //===================================================================== TIMER & FLAG COUNT
@@ -406,6 +395,7 @@ background::background(sf::String TextPath)
 	scaleType = stretch;
 }
 
+
 bool IsMouseColliding(actor& actor, sf::RenderWindow& window)
 {
 	sf::FloatRect actorPos = actor.GetRectCollision();
@@ -444,3 +434,75 @@ bool LoadTexture(const sf::String& file, sf::Texture& texture)
 	assert(false);
 	return false;
 }
+
+//===================================================================== BUTTONS
+button::button()
+{
+	type = "button";
+	texturePath = "../Assets/Button.png";
+	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
+	{
+		assert(false);
+	}
+}
+
+void button::Render(sf::RenderWindow& window)
+{
+	window.draw(sprite);
+	sf::Text textOBJ;
+
+	textOBJ.setString(text);
+	textOBJ.setFont(font);
+	textOBJ.setFillColor(sf::Color::Black);
+	textOBJ.setCharacterSize(24);
+	
+	sf::FloatRect objRect = textOBJ.getLocalBounds();
+	textOBJ.setOrigin(objRect.width / 2.f, objRect.height / 2.f);
+	textOBJ.setPosition(location.x, location.y - 5);
+
+	window.draw(textOBJ);
+}
+
+//Play Button
+playButton::playButton()
+{
+	scale = { 4, 2 };
+}
+void playButton::OnLeftClick()
+{
+	gameInst->PlayGame(size, count);
+}
+
+//Replay Button
+retryButton::retryButton()
+{
+	scale = { 4, 2 };
+	text = "Retry";
+}
+void retryButton::OnLeftClick()
+{
+	gameInst->Init(*windowRef);
+}
+//Menu Button
+menuButton::menuButton()
+{
+	text = "Menu";
+	scale = { 4, 2 };
+}
+void menuButton::OnLeftClick()
+{
+	gameInst->state = menu;
+	gameInst->Init(*windowRef);
+}
+//Exit Button
+exitButton::exitButton()
+{
+	text = "Exit";
+	scale = { 4, 2 };
+}
+void exitButton::OnLeftClick()
+{
+	windowRef->close();
+}
+
+//===================================================================== BUTTONS

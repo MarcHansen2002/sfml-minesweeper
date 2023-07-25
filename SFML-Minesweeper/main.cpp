@@ -86,7 +86,6 @@ int main()
 }
 
 //TODO
-//Button to restart or return to menu after win / loss
 //Include mySQL and make top times saved
 
 //End goal: Portfolio piece with git shown on site. Build game for itch.io and ask for feedback from minesweeper subreddit

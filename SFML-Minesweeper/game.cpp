@@ -232,10 +232,6 @@ void game::PlayGame(sf::Vector2i size, int count)
 	fieldSize = size;
 	mineCount = count;
 
-	tilesToWin = (fieldSize.x * fieldSize.y) - mineCount;
-	time = 0.f;
-	remainingFlags = mineCount;
-
 	state = play;
 	Init(*windowRef);
 }
@@ -382,17 +378,43 @@ void game::GameOver()
 			tiles[i]->revealed = true;
 		}
 	}
+
+	AddFinishButtons();
 }
 void game::GameWin()
 {
 	canClick = false;
 	clickedAnywhere = false;
+	AddFinishButtons();
+}
+void game::AddFinishButtons()
+{
+	retryButton* retry = nullptr;
+	retry = new retryButton;
+	retry->location = { windowRef->getSize().x / 2.f, 50};
+	AddActor(retry);
+
+	menuButton* menu = nullptr;
+	menu = new menuButton;
+	menu->location = { (windowRef->getSize().x / 2.f) + 200, 50 };
+	AddActor(menu);
+
+	exitButton* exit = nullptr;
+	exit = new exitButton;
+	exit->location = { (windowRef->getSize().x / 2.f) + 400, 50 };
+	AddActor(exit);
 }
 //Scene Initialising
 void game::InitGame()
 {
 	//Clear all actors and remove them from heap
 	ClearActors();
+
+	canClick = true;
+	clickedAnywhere = false;
+	tilesToWin = (fieldSize.x * fieldSize.y) - mineCount;
+	time = 0.f;
+	remainingFlags = mineCount;
 
 	//Create background object
 	background* BG = nullptr;
@@ -422,24 +444,24 @@ void game::InitMenu()
 	playButton* easyButton = nullptr;
 	easyButton = new playButton;
 	easyButton->location = { windowRef->getSize().x / 2.f, 500 };
-	easyButton->scale = { 3, 3 };
 	easyButton->size = { 9, 9 };
 	easyButton->count = 10;
+	easyButton->text = "Easy";
 	AddActor(easyButton);
 	
 	playButton* normalButton = nullptr;
 	normalButton = new playButton;
 	normalButton->location = { windowRef->getSize().x / 2.f, 600 };
-	normalButton->scale = { 3, 3 };
 	normalButton->size = { 16, 16 };
 	normalButton->count = 40;
+	normalButton->text = "Normal";
 	AddActor(normalButton);
 
 	playButton* hardButton = nullptr;
 	hardButton = new playButton;
 	hardButton->location = { windowRef->getSize().x / 2.f, 700 };
-	hardButton->scale = { 3, 3 };
 	hardButton->size = { 30, 16 };
 	hardButton->count = 99;
+	hardButton->text = "Hard";
 	AddActor(hardButton);
 }

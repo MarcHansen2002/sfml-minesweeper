@@ -80,17 +80,7 @@ public:
 	void OnMiddleClick() override;
 };
 
-class playButton : public actor
-{
-public:
-	//Variables
-	sf::Vector2i size = { 10, 10 };
-	int count = 10;
 
-	//Functions
-	playButton();
-	void OnLeftClick();
-};
 
 class timer : public actor
 {
@@ -119,6 +109,50 @@ public:
 	//Function
 	background(sf::String TextPath);
 };
+
+//===================================================================== BUTTONS
+class button : public actor
+{
+public:
+	//Variables
+	sf::Font font;
+	sf::String text;
+
+	//Functions
+	button();
+	void Render(sf::RenderWindow& window);
+};
+
+class playButton : public button
+{
+public:
+	//Variables
+	sf::Vector2i size = { 10, 10 };
+	int count = 10;
+
+	//Functions
+	playButton();
+	void OnLeftClick();
+};
+class retryButton : public button
+{
+public:
+	retryButton();
+	void OnLeftClick();
+};
+class menuButton : public button
+{
+public:
+	menuButton();
+	void OnLeftClick();
+};
+class exitButton : public button
+{
+public:
+	exitButton();
+	void OnLeftClick();
+};
+//===================================================================== BUTTONS
 
 bool LoadTexture(const sf::String& file, sf::Texture& texture);
 bool IsMouseColliding(actor& actor, sf::RenderWindow& window);

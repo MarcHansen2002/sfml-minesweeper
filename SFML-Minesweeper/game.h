@@ -59,6 +59,7 @@ public:
 	//Game Ending
 	void GameWin();
 	void GameOver();
+	void AddFinishButtons();
 
 	std::vector<tile*> GetAllTiles(bool sort = false);
 
