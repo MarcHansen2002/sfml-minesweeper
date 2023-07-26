@@ -127,6 +127,8 @@ class playButton : public button
 {
 public:
 	//Variables
+	std::string difficulty;
+
 	sf::Vector2i size = { 10, 10 };
 	int count = 10;
 

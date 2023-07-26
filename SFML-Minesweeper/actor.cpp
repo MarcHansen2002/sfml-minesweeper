@@ -208,6 +208,8 @@ void tile::OnLeftClick()
 		gameInst->clickedAnywhere = true;
 		gameInst->AddMines(gridLoc);
 		gameInst->SetNumbers();
+		//Adds 1 to current attempts of this difficulty
+		gameInst->metrics.currentData.attempts++;
 	}
 	//Logic for any click after starting
 	if (!flagged && !revealed)
@@ -470,6 +472,8 @@ playButton::playButton()
 }
 void playButton::OnLeftClick()
 {
+	gameInst->metrics.currentData.difficultyName = difficulty;
+
 	gameInst->PlayGame(size, count);
 }
 

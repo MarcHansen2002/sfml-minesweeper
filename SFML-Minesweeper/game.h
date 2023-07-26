@@ -1,11 +1,54 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "actor.h"
+#include "database.h"
+
 enum GameState
 {
 	menu,
-	play
+	play,
+	stats,
+	help
 };
+
+class Metrics
+{
+public:
+	const std::string VERSION = "1.0";
+
+	bool useDB = true;
+	database db;
+
+	struct difficultyData
+	{
+		std::string difficultyName;
+		float time;
+		int attempts;
+		int completions;
+	};
+	difficultyData currentData;
+	std::vector<difficultyData> diffData;
+	std::string filePath;
+
+	//Resets current stored stats
+	//void Restart();
+
+	bool Load(const std::string& path)
+	{
+		return DBLoad(path);
+	}
+	bool Save(const std::string& path = "")
+	{
+		return DBSave(path);
+	}
+
+	bool DBSave(const std::string& path = "");
+	bool DBLoad(const std::string& path = "");
+
+	void GetCurrentData();
+	void StoreCurrentData();
+};
+
 class game
 {
 public:
@@ -15,6 +58,7 @@ public:
 	sf::Vector2f resolution;
 
 	//References
+	Metrics metrics;
 	sf::RenderWindow* windowRef = nullptr;
 	
 	//Actors
@@ -66,5 +110,6 @@ public:
 	//Initialise a scene
 	void InitGame();
 	void InitMenu();
+	void InitHelp();
+	void InitStats();
 };
-

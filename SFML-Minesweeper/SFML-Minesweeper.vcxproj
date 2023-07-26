@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\sqlite\sqlite3.c" />
     <ClCompile Include="actor.cpp" />
     <ClCompile Include="database.cpp" />
     <ClCompile Include="game.cpp" />

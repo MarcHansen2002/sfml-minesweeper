@@ -54,7 +54,12 @@ int main()
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
+            {
+                //Saves any data in case closed mid-game
+                gameInst.metrics.StoreCurrentData();
+                gameInst.metrics.DBSave("../Data/Stats.db");
                 window.close();
+            }
             if (event.type == sf::Event::KeyPressed)
             {
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
@@ -86,6 +91,7 @@ int main()
 }
 
 //TODO
-//Include mySQL and make top times saved
+//Help page
+//Stats page
 
 //End goal: Portfolio piece with git shown on site. Build game for itch.io and ask for feedback from minesweeper subreddit

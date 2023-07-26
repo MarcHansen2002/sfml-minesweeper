@@ -1,5 +1,6 @@
 #include "game.h"
 #include <iostream>
+#include <sstream>
 bool SortTiles(actor* a, actor* b)
 {
 	//Return A if A is above B
@@ -25,6 +26,7 @@ game::game()
 }
 void game::Init(sf::RenderWindow& window)
 {
+	metrics.Load("../Data/Stats.db");
 	switch (state)
 	{
 	case GameState::menu:
@@ -32,6 +34,12 @@ void game::Init(sf::RenderWindow& window)
 		break;
 	case GameState::play:
 		InitGame();
+		break;
+	case GameState::help:
+		InitHelp();
+		break;
+	case GameState::stats:
+		InitStats();
 		break;
 	default:
 		break;
@@ -379,12 +387,23 @@ void game::GameOver()
 		}
 	}
 
+	metrics.DBSave("../Data/Stats.db");
 	AddFinishButtons();
 }
 void game::GameWin()
 {
 	canClick = false;
 	clickedAnywhere = false;
+	//Adds 1 to completions for current difficulty
+	metrics.currentData.completions++;
+	//Overwrite time for current difficulty if time has been improved
+	if ((time < metrics.currentData.time) || (metrics.currentData.time == NULL))
+	{
+		metrics.currentData.time = time;
+	}
+	//Store current data back into the stored data
+	metrics.StoreCurrentData();
+	metrics.DBSave("../Data/Stats.db");
 	AddFinishButtons();
 }
 void game::AddFinishButtons()
@@ -436,6 +455,9 @@ void game::InitGame()
 	flagCounter->location = { 400, 50 };
 	flagCounter->scale = { 3, 3 };
 	AddActor(flagCounter, false);
+
+	//Gets data from selected difficulty
+	metrics.GetCurrentData();
 }
 void game::InitMenu()
 {
@@ -447,6 +469,7 @@ void game::InitMenu()
 	easyButton->size = { 9, 9 };
 	easyButton->count = 10;
 	easyButton->text = "Easy";
+	easyButton->difficulty = "Easy";
 	AddActor(easyButton);
 	
 	playButton* normalButton = nullptr;
@@ -455,6 +478,7 @@ void game::InitMenu()
 	normalButton->size = { 16, 16 };
 	normalButton->count = 40;
 	normalButton->text = "Normal";
+	normalButton->difficulty = "Normal";
 	AddActor(normalButton);
 
 	playButton* hardButton = nullptr;
@@ -463,5 +487,125 @@ void game::InitMenu()
 	hardButton->size = { 30, 16 };
 	hardButton->count = 99;
 	hardButton->text = "Hard";
+	hardButton->difficulty = "Hard";
 	AddActor(hardButton);
+}
+void game::InitHelp()
+{
+
+}
+void game::InitStats()
+{
+
+}
+
+
+//==================================================== METRIC FUNCTIONS
+bool Metrics::DBLoad(const std::string& path)
+{
+	diffData.clear();
+	bool exists;
+	db.Init(path, exists);
+	//Load data if database exists
+	if (exists)
+	{
+		//Fetch all data from GAME_INFO
+		db.ExecQuery("SELECT * FROM GAME_INFO");
+		std::string version = db.GetStr(0, "VERSION");
+		if (version != Metrics::VERSION)
+		{
+			db.ExecQuery("DROP TABLE IF EIXSTS GAME_STATS");
+			db.ExecQuery("DROP TABLE IF EXISTS GAME_INFO");
+			exists = false;
+		}
+	}
+	//Create database if one does not exist
+	else
+	{
+		//Create stats table
+		db.ExecQuery("CREATE TABLE GAME_STATS(" \
+			"DIFFICULTY			TEXT	NOT NULL,"\
+			"TIME		REAL		NOT NULL,"\
+			"ATTEMPTS		INT		NOT NULL,"\
+			"COMPLETIONS		INT		NOT NULL)");
+		//Create info table
+		db.ExecQuery("CREATE TABLE GAME_INFO("\
+			"ID			INTEGER PRIMARY KEY		,"\
+			"VERSION		CHAR(10)	NOT NULL)");
+
+		std::stringstream ss;
+		ss << "INSERT INTO GAME_INFO (VERSION)"\
+			"VALUES (" << Metrics::VERSION << ")";
+		db.ExecQuery(ss.str());
+		return false;
+	}
+	//Get stats from DB, old or empty from newly created
+	db.ExecQuery("SELECT * FROM GAME_STATS");
+	//Loop through results and add them to stored vector
+	for (size_t i = 0; i < db.results.size(); i++)
+	{
+		diffData.push_back(difficultyData{ db.GetStr(i,"DIFFICULTY"), db.GetFloat(i, "TIME"), db.GetInt(i, "ATTEMPTS"), db.GetInt(i, "COMPLETIONS") });
+	}
+	return false;
+}
+bool Metrics::DBSave(const std::string& path)
+{
+	db.ExecQuery("DELETE FROM GAME_STATS");
+	std::stringstream ss;
+	for (size_t i = 0; i < diffData.size(); i++)
+	{
+		ss.str("");
+		ss << "INSERT INTO GAME_STATS (DIFFICULTY, TIME, ATTEMPTS, COMPLETIONS)" \
+			<< "VALUES ('" << diffData[i].difficultyName << "'," \
+			<< diffData[i].time << "," \
+			<< diffData[i].attempts << "," \
+			<< diffData[i].completions << ")";
+		db.ExecQuery(ss.str());
+	}
+	ss.str("");
+	ss << "UPDATE GAME_INFO SET VERSION = " << Metrics::VERSION;
+	db.ExecQuery(ss.str());
+	db.SaveToDisk();
+
+	return false;
+}
+
+void Metrics::GetCurrentData()
+{
+	for (int i = 0; i < diffData.size(); i++)
+	{
+		//Makes sure it's loading from the correct difficulty
+		if (diffData[i].difficultyName == currentData.difficultyName)
+		{
+			//Get data from this row
+			currentData.time = diffData[i].time;
+			currentData.attempts = diffData[i].attempts;
+			currentData.completions = diffData[i].completions;
+			//Exit loop
+			i = diffData.size() + 1;
+		}
+	}
+}
+void Metrics::StoreCurrentData()
+{
+	bool found = false;
+	for (int i = 0; i < diffData.size(); i++)
+	{
+		//Makes sure it's saving to the correct difficulty
+		if (currentData.difficultyName == diffData[i].difficultyName)
+		{
+			found = true;
+			//Store data into this row
+			diffData[i].time = currentData.time;
+			diffData[i].attempts = currentData.attempts;
+			diffData[i].completions = currentData.completions;
+			//Exit loop
+			i = diffData.size() + 1;
+		}
+	}
+	//If difficulty is not recorded. Add it in
+	if (!found)
+	{
+		diffData.push_back(currentData);
+	}
 }
