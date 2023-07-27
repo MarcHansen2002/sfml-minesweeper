@@ -1,5 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
 #include "actor.h"
 #include "database.h"
 

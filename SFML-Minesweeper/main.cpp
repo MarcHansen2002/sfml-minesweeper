@@ -91,8 +91,8 @@ int main()
 }
 
 //TODO
-//Help page
-//Assets
 //Sounds
+//Button hover effect
+//Make button more modular
 
 //End goal: Portfolio piece with git shown on site. Build game for itch.io and ask for feedback from minesweeper subreddit

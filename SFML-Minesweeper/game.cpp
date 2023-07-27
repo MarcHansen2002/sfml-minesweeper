@@ -1,6 +1,5 @@
 #include "game.h"
-#include <iostream>
-#include <sstream>
+
 bool SortTiles(actor* a, actor* b)
 {
 	//Return A if A is above B
@@ -465,6 +464,13 @@ void game::InitMenu()
 {
 	ClearActors();
 
+	image* bg = nullptr;
+	bg = new image("../Assets/Backgrounds/MinesweeperPlainBG.png");
+	bg->scaleType = stretch;
+	bg->origin = { 0, 0 };
+	bg->location = { 0, 0 };
+	AddActor(bg, false);
+
 	playButton* easyButton = nullptr;
 	easyButton = new playButton;
 	easyButton->location = { windowRef->getSize().x / 2.f, 100 };
@@ -510,49 +516,12 @@ void game::InitHelp()
 {
 	ClearActors();
 
-	//Mine count
-	textBox* mineText = nullptr;
-	mineText = new textBox;
-	mineText->location = {100, 200};
-	mineText->origin = { 0, 0.5f };
-	mineText->string = "The number on the tile represents how many mines are surrounding the tile within a 3*3 area.\n With this example, there are 3 mines around the number 3.";
-	AddActor(mineText, false);
-
-	image* mineCount = nullptr;
-	mineCount = new image("../Assets/Help/MineCountExample.png");
-	mineCount->location = { 1200, 200 };
-	mineCount->origin = { 0, 0.5f };
-	mineCount->scale = { 3, 3 };
-	AddActor(mineCount, false);
-
-	//Flagging
-	image* correctFlag = nullptr;
-	correctFlag = new image("../Assets/Help/CorrectFlaggingExample.png");
-	correctFlag->location = {1200, 592 };
-	correctFlag->origin = { 0, 0 };
-	correctFlag->scale = { 3, 3 };
-	AddActor(correctFlag, false);
-
-	textBox* correctText = nullptr;
-	correctText = new textBox;
-	correctText->location = { 100, 400 };
-	correctText->origin = { 0, 0 };
-	correctText->string = "Right clicking a closed tile will place a flag on it.\nClicking again will remove the flag.\nThis can be used to mark where you suspect a mine might be.";
-	AddActor(correctText, false);
-
-	image* incorrectFlag = nullptr;
-	incorrectFlag = new image("../Assets/Help/IncorrectFlaggingExample.png");
-	incorrectFlag->location = { 1200, 400 };
-	incorrectFlag->origin = { 0, 0 };
-	incorrectFlag->scale = { 3, 3 };
-	AddActor(incorrectFlag, false);
-
-	textBox* middleClickText = nullptr;
-	middleClickText = new textBox;
-	middleClickText->location = { 100, 592 };
-	middleClickText->origin = { 0, 0 };
-	middleClickText->string = "If a tile is surrounded by the correct amount of flags,\nyou can middle click it to quickly open all surrounding tiles.";
-	AddActor(middleClickText, false);
+	image* bg = nullptr;
+	bg = new image("../Assets/Backgrounds/MinesweeperHelpBG.png");
+	bg->scaleType = stretch;
+	bg->origin = { 0, 0 };
+	bg->location = { 0, 0 };
+	AddActor(bg, false);
 
 	//Main menu button
 	menuButton* menu = nullptr;
@@ -564,42 +533,63 @@ void game::InitStats()
 {
 	ClearActors();
 
-	//Make text actors to display stats
+	//Create background image and place it
+	image* bg = nullptr;
+	bg = new image("../Assets/Backgrounds/MinesweeperStatsBG.png");
+	bg->scaleType = stretch;
+	bg->origin = { 0, 0 };
+	bg->location = { 0, 0 };
+	AddActor(bg, false);
 
-	//Easy stats
+	//Create text for easy stats
 	textBox* easyStats = nullptr;
 	easyStats = new textBox;
-	easyStats->location = { 800, 100 };
-
+	easyStats->textColour = sf::Color::Black;
+	easyStats->location = { 300, 400 };
+	//Fetch easy stats
 	Metrics::difficultyData easyData = metrics.GetDifficultyData("Easy");
-	easyStats->string = "Easy";
-	easyStats->string += "\nBest Time: " + std::to_string(easyData.time);
-	easyStats->string += "\nCompletions: " + std::to_string(easyData.completions);
-	easyStats->string += "\nAttempts: " + std::to_string(easyData.attempts);
+	//Round time to 2 decimal place
+	std::stringstream easyStream;
+	float easyTime = easyData.time;
+	easyStream << std::fixed << std::setprecision(2) << easyTime;
+	//Place easy stats into text
+	easyStats->string = "\nBest Time: " + easyStream.str();
+	easyStats->string += "\n\nCompletions: " + std::to_string(easyData.completions);
+	easyStats->string += "\n\nAttempts: " + std::to_string(easyData.attempts);
 	AddActor(easyStats, false);
 
-	//Normal stats
+	//Create text for normal stats
 	textBox* normalStats = nullptr;
 	normalStats = new textBox;
+	normalStats->textColour = sf::Color::Black;
 	normalStats->location = { 800, 400 };
-	
+	//Fetch normal stats
 	Metrics::difficultyData normalData = metrics.GetDifficultyData("Normal");
-	normalStats->string = "Normal";
-	normalStats->string += "\nBest Time: " + std::to_string(normalData.time);
-	normalStats->string += "\nCompletions: " + std::to_string(normalData.completions);
-	normalStats->string += "\nAttempts: " + std::to_string(normalData.attempts);
+	//Round time to 2 decimal place
+	std::stringstream normalStream;
+	float normalTime = normalData.time;
+	normalStream << std::fixed << std::setprecision(2) << normalTime;
+	//Place normal stats into text
+	normalStats->string = "\nBest Time: " + normalStream.str();
+	normalStats->string += "\n\nCompletions: " + std::to_string(normalData.completions);
+	normalStats->string += "\n\nAttempts: " + std::to_string(normalData.attempts);
 	AddActor(normalStats, false);
 
-	//Hard stats
+	//Create text for hard stats
 	textBox* hardStats = nullptr;
 	hardStats = new textBox;
-	hardStats->location = { 800, 700 };
-	
+	hardStats->textColour = sf::Color::Black;
+	hardStats->location = { 1300, 400 };
+	//Fetch hard stats
 	Metrics::difficultyData hardData = metrics.GetDifficultyData("Normal");
-	hardStats->string = "Hard";
-	hardStats->string += "\nBest Time: " + std::to_string(hardData.time);
-	hardStats->string += "\nCompletions: " + std::to_string(hardData.completions);
-	hardStats->string += "\nAttempts: " + std::to_string(hardData.attempts);
+	//Round time to 2 decimal place
+	std::stringstream hardStream;
+	float hardTime = hardData.time;
+	hardStream << std::fixed << std::setprecision(2) << hardTime;
+	//Place hard stats into text
+	hardStats->string = "\nBest Time: " + hardStream.str();
+	hardStats->string += "\n\nCompletions: " + std::to_string(hardData.completions);
+	hardStats->string += "\n\nAttempts: " + std::to_string(hardData.attempts);
 	AddActor(hardStats, false);
 
 	//Main menu button
