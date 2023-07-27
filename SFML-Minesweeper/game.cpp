@@ -465,7 +465,7 @@ void game::InitMenu()
 
 	playButton* easyButton = nullptr;
 	easyButton = new playButton;
-	easyButton->location = { windowRef->getSize().x / 2.f, 500 };
+	easyButton->location = { windowRef->getSize().x / 2.f, 100 };
 	easyButton->size = { 9, 9 };
 	easyButton->count = 10;
 	easyButton->text = "Easy";
@@ -474,7 +474,7 @@ void game::InitMenu()
 	
 	playButton* normalButton = nullptr;
 	normalButton = new playButton;
-	normalButton->location = { windowRef->getSize().x / 2.f, 600 };
+	normalButton->location = { windowRef->getSize().x / 2.f, 200 };
 	normalButton->size = { 16, 16 };
 	normalButton->count = 40;
 	normalButton->text = "Normal";
@@ -483,20 +483,84 @@ void game::InitMenu()
 
 	playButton* hardButton = nullptr;
 	hardButton = new playButton;
-	hardButton->location = { windowRef->getSize().x / 2.f, 700 };
+	hardButton->location = { windowRef->getSize().x / 2.f, 300 };
 	hardButton->size = { 30, 16 };
 	hardButton->count = 99;
 	hardButton->text = "Hard";
 	hardButton->difficulty = "Hard";
 	AddActor(hardButton);
+
+	//Stats button
+	statsButton* stats = nullptr;
+	stats = new statsButton;
+	stats->location = { windowRef->getSize().x / 2.f, 500 };
+	stats->scale = { 3, 3 };
+	AddActor(stats);
+
+	//Help button
+	helpButton* help = nullptr;
+	help = new helpButton;
+	help->location = { windowRef->getSize().x / 2.f, 600 };
+	help->scale = { 3, 3 };
+	AddActor(help);
 }
 void game::InitHelp()
 {
+	ClearActors();
 
+	//Main menu button
+	menuButton* menu = nullptr;
+	menu = new menuButton;
+	menu->location = { (windowRef->getSize().x / 2.f), 800 };
+	AddActor(menu);
 }
 void game::InitStats()
 {
+	ClearActors();
 
+	//Make text actors to display stats
+
+	//Easy stats
+	textBox* easyStats = nullptr;
+	easyStats = new textBox;
+	easyStats->location = { 800, 100 };
+
+	Metrics::difficultyData easyData = metrics.GetDifficultyData("Easy");
+	easyStats->string = "Easy";
+	easyStats->string += "\nBest Time: " + std::to_string(easyData.time);
+	easyStats->string += "\nCompletions: " + std::to_string(easyData.completions);
+	easyStats->string += "\nAttempts: " + std::to_string(easyData.attempts);
+	AddActor(easyStats, false);
+
+	//Normal stats
+	textBox* normalStats = nullptr;
+	normalStats = new textBox;
+	normalStats->location = { 800, 400 };
+	
+	Metrics::difficultyData normalData = metrics.GetDifficultyData("Normal");
+	normalStats->string = "Normal";
+	normalStats->string += "\nBest Time: " + std::to_string(normalData.time);
+	normalStats->string += "\nCompletions: " + std::to_string(normalData.completions);
+	normalStats->string += "\nAttempts: " + std::to_string(normalData.attempts);
+	AddActor(normalStats, false);
+
+	//Hard stats
+	textBox* hardStats = nullptr;
+	hardStats = new textBox;
+	hardStats->location = { 800, 700 };
+	
+	Metrics::difficultyData hardData = metrics.GetDifficultyData("Normal");
+	hardStats->string = "Hard";
+	hardStats->string += "\nBest Time: " + std::to_string(hardData.time);
+	hardStats->string += "\nCompletions: " + std::to_string(hardData.completions);
+	hardStats->string += "\nAttempts: " + std::to_string(hardData.attempts);
+	AddActor(hardStats, false);
+
+	//Main menu button
+	menuButton* menu = nullptr;
+	menu = new menuButton;
+	menu->location = { (windowRef->getSize().x / 2.f), 800 };
+	AddActor(menu);
 }
 
 
@@ -608,4 +672,19 @@ void Metrics::StoreCurrentData()
 	{
 		diffData.push_back(currentData);
 	}
+}
+
+Metrics::difficultyData Metrics::GetDifficultyData(std::string diff)
+{
+	//Get data from selected difficulty
+	for (int i = 0; i < diffData.size(); i++)
+	{
+		if (diffData[i].difficultyName == diff)
+		{
+			return diffData[i];
+		}
+	}
+	//Return an empty stats list if not found
+	difficultyData empty = { diff, 0, 0, 0 };
+	return empty;
 }

@@ -154,7 +154,35 @@ public:
 	exitButton();
 	void OnLeftClick();
 };
+class helpButton : public button
+{
+public:
+	helpButton();
+	void OnLeftClick();
+};
+class statsButton : public button
+{
+public:
+	statsButton();
+	void OnLeftClick();
+};
 //===================================================================== BUTTONS
+
+class textBox : public actor
+{
+public:
+	//Variables
+	sf::Text text;
+	sf::Font font;
+	sf::String string;
+
+	int textSize = 24;
+	sf::Color textColour = sf::Color::White;
+	//Functions
+	textBox();
+	void Render(sf::RenderWindow& window);
+};
+
 
 bool LoadTexture(const sf::String& file, sf::Texture& texture);
 bool IsMouseColliding(actor& actor, sf::RenderWindow& window);

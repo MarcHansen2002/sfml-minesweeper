@@ -3,13 +3,7 @@
 #include "actor.h"
 #include "database.h"
 
-enum GameState
-{
-	menu,
-	play,
-	stats,
-	help
-};
+
 
 class Metrics
 {
@@ -47,11 +41,19 @@ public:
 
 	void GetCurrentData();
 	void StoreCurrentData();
+	difficultyData GetDifficultyData(std::string diff);
 };
 
 class game
 {
 public:
+	enum GameState
+	{
+		menu,
+		play,
+		stats,
+		help
+	};
 	//Variables
 	GameState state = GameState::menu;
 	bool debugMode;

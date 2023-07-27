@@ -428,6 +428,11 @@ bool IsMouseColliding(actor& actor, sf::RenderWindow& window)
 }
 bool LoadTexture(const sf::String& file, sf::Texture& texture)
 {
+	//If no texture path is specified, do not try to load
+	if ((file.isEmpty()) || (file == ""))
+	{
+		return false;
+	}
 	//Loads texture from specified file path
 	if (texture.loadFromFile(file))
 	{
@@ -495,7 +500,7 @@ menuButton::menuButton()
 }
 void menuButton::OnLeftClick()
 {
-	gameInst->state = menu;
+	gameInst->state = gameInst->GameState::menu;
 	gameInst->Init(*windowRef);
 }
 //Exit Button
@@ -508,5 +513,51 @@ void exitButton::OnLeftClick()
 {
 	windowRef->close();
 }
+//Stats Button
+statsButton::statsButton()
+{
+	text = "Stats";
+}
+void statsButton::OnLeftClick()
+{
+	gameInst->state = gameInst->GameState::stats;
+	gameInst->Init(*windowRef);
+}
+//Help Button
+helpButton::helpButton()
+{
+	text = "Help";
+}
+void helpButton::OnLeftClick()
+{
+	gameInst->state = gameInst->GameState::help;
+	gameInst->Init(*windowRef);
+}
+
 
 //===================================================================== BUTTONS
+textBox::textBox()
+{
+	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
+	{
+		std::cout << "text fail";
+		assert(false);
+	}
+	text.setString(string);
+	text.setFont(font);
+	text.setFillColor(sf::Color::White);
+	text.setCharacterSize(textSize);
+}
+
+void textBox::Render(sf::RenderWindow& window)
+{
+	text.setString(string);
+	text.setFont(font);
+	text.setFillColor(textColour);
+	text.setCharacterSize(textSize);
+	sf::FloatRect objRect = text.getLocalBounds();
+	text.setOrigin(objRect.width / 2.f, objRect.height / 2.f);
+	text.setPosition(location.x, location.y - 5);
+
+	window.draw(text);
+}
