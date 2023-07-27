@@ -1,10 +1,10 @@
 ﻿  game.cpp
 C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(153,40): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(165,25): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(611,62): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(611,86): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(611,112): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(611,141): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(649,27): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(667,27): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(657,62): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(657,86): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(657,112): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(657,141): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(695,27): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(713,27): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   SFML-Minesweeper.vcxproj -> C:\Users\Marc\source\repos\SFML-Minesweeper\x64\Debug\SFML-Minesweeper.exe

@@ -390,11 +390,10 @@ void flagCount::Render(sf::RenderWindow& window)
 //===================================================================== TIMER & FLAG COUNT
 
 
-background::background(sf::String TextPath)
+image::image(sf::String TextPath)
 {
 	texturePath = TextPath;
-	origin = { 0, 0 };
-	scaleType = stretch;
+	origin = { 0.5f, 0.5f };
 }
 
 
@@ -556,7 +555,7 @@ void textBox::Render(sf::RenderWindow& window)
 	text.setFillColor(textColour);
 	text.setCharacterSize(textSize);
 	sf::FloatRect objRect = text.getLocalBounds();
-	text.setOrigin(objRect.width / 2.f, objRect.height / 2.f);
+	text.setOrigin(objRect.width / (1 / origin.x), objRect.height / (1/origin.y));
 	text.setPosition(location.x, location.y - 5);
 
 	window.draw(text);

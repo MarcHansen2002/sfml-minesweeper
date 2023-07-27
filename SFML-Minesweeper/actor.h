@@ -103,11 +103,11 @@ public:
 	void Render(sf::RenderWindow& window);
 };
 
-class background : public actor
+class image : public actor
 {
 public:
 	//Function
-	background(sf::String TextPath);
+	image(sf::String TextPath);
 };
 
 //===================================================================== BUTTONS
@@ -175,6 +175,8 @@ public:
 	sf::Text text;
 	sf::Font font;
 	sf::String string;
+
+	sf::Vector2f origin = { 0.5f, 0.5f };
 
 	int textSize = 24;
 	sf::Color textColour = sf::Color::White;

@@ -386,7 +386,7 @@ void game::GameOver()
 			tiles[i]->revealed = true;
 		}
 	}
-
+	metrics.StoreCurrentData();
 	metrics.DBSave("../Data/Stats.db");
 	AddFinishButtons();
 }
@@ -436,8 +436,10 @@ void game::InitGame()
 	remainingFlags = mineCount;
 
 	//Create background object
-	background* BG = nullptr;
-	BG = new background("../Assets/SweeperBG.png");
+	image* BG = nullptr;
+	BG = new image("../Assets/SweeperBG.png");
+	BG->scaleType = ScaleMode::stretch;
+	BG->origin = { 0, 0 };
 	BG->zLayer = 0;
 	AddActor(BG, false);
 
@@ -507,6 +509,50 @@ void game::InitMenu()
 void game::InitHelp()
 {
 	ClearActors();
+
+	//Mine count
+	textBox* mineText = nullptr;
+	mineText = new textBox;
+	mineText->location = {100, 200};
+	mineText->origin = { 0, 0.5f };
+	mineText->string = "The number on the tile represents how many mines are surrounding the tile within a 3*3 area.\n With this example, there are 3 mines around the number 3.";
+	AddActor(mineText, false);
+
+	image* mineCount = nullptr;
+	mineCount = new image("../Assets/Help/MineCountExample.png");
+	mineCount->location = { 1200, 200 };
+	mineCount->origin = { 0, 0.5f };
+	mineCount->scale = { 3, 3 };
+	AddActor(mineCount, false);
+
+	//Flagging
+	image* correctFlag = nullptr;
+	correctFlag = new image("../Assets/Help/CorrectFlaggingExample.png");
+	correctFlag->location = {1200, 592 };
+	correctFlag->origin = { 0, 0 };
+	correctFlag->scale = { 3, 3 };
+	AddActor(correctFlag, false);
+
+	textBox* correctText = nullptr;
+	correctText = new textBox;
+	correctText->location = { 100, 400 };
+	correctText->origin = { 0, 0 };
+	correctText->string = "Right clicking a closed tile will place a flag on it.\nClicking again will remove the flag.\nThis can be used to mark where you suspect a mine might be.";
+	AddActor(correctText, false);
+
+	image* incorrectFlag = nullptr;
+	incorrectFlag = new image("../Assets/Help/IncorrectFlaggingExample.png");
+	incorrectFlag->location = { 1200, 400 };
+	incorrectFlag->origin = { 0, 0 };
+	incorrectFlag->scale = { 3, 3 };
+	AddActor(incorrectFlag, false);
+
+	textBox* middleClickText = nullptr;
+	middleClickText = new textBox;
+	middleClickText->location = { 100, 592 };
+	middleClickText->origin = { 0, 0 };
+	middleClickText->string = "If a tile is surrounded by the correct amount of flags,\nyou can middle click it to quickly open all surrounding tiles.";
+	AddActor(middleClickText, false);
 
 	//Main menu button
 	menuButton* menu = nullptr;

@@ -92,6 +92,7 @@ int main()
 
 //TODO
 //Help page
-//Stats page
+//Assets
+//Sounds
 
 //End goal: Portfolio piece with git shown on site. Build game for itch.io and ask for feedback from minesweeper subreddit
