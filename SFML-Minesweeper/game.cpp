@@ -489,6 +489,7 @@ void game::InitMenu()
 	bg->scaleType = stretch;
 	bg->origin = { 0, 0 };
 	bg->location = { 0, 0 };
+	bg->zLayer = 0;
 	AddActor(bg, false);
 
 	playButton* easyButton = nullptr;

@@ -8,7 +8,6 @@
 // ===================================================================== BASE ACTOR
 actor::actor()
 {
-
 }
 //Required
 void actor::Init()
@@ -334,9 +333,6 @@ void tile::OnMiddleClick()
 //===================================================================== TILE
 
 
-
-
-
 //===================================================================== TIMER & FLAG COUNT
 timer::timer()
 {
@@ -450,6 +446,12 @@ button::button()
 	{
 		assert(false);
 	}
+	if (!buffer.loadFromFile("../Assets/Sounds/Click.wav"))
+	{
+		std::cout << "no sound";
+		assert(false);
+	}
+	clickSound.setBuffer(buffer);
 	origin = { 0.5, 0.5 };
 }
 
@@ -497,6 +499,10 @@ void button::Render(sf::RenderWindow& window)
 
 	window.draw(textOBJ);
 }
+void button::OnLeftClick()
+{
+	clickSound.play();
+}
 
 sf::FloatRect button::GetRectCollision()
 {
@@ -532,6 +538,7 @@ playButton::playButton()
 }
 void playButton::OnLeftClick()
 {
+	button::OnLeftClick();
 	gameInst->metrics.currentData.difficultyName = difficulty;
 
 	gameInst->PlayGame(size, count);
@@ -545,6 +552,7 @@ retryButton::retryButton()
 }
 void retryButton::OnLeftClick()
 {
+	button::OnLeftClick();
 	gameInst->Init(*windowRef);
 }
 //Menu Button
@@ -555,6 +563,7 @@ menuButton::menuButton()
 }
 void menuButton::OnLeftClick()
 {
+	button::OnLeftClick();
 	gameInst->state = gameInst->GameState::menu;
 	gameInst->Init(*windowRef);
 }
@@ -566,6 +575,7 @@ exitButton::exitButton()
 }
 void exitButton::OnLeftClick()
 {
+	button::OnLeftClick();
 	windowRef->close();
 }
 //Stats Button
@@ -575,6 +585,7 @@ statsButton::statsButton()
 }
 void statsButton::OnLeftClick()
 {
+	button::OnLeftClick();
 	gameInst->state = gameInst->GameState::stats;
 	gameInst->Init(*windowRef);
 }
@@ -585,6 +596,7 @@ helpButton::helpButton()
 }
 void helpButton::OnLeftClick()
 {
+	button::OnLeftClick();
 	gameInst->state = gameInst->GameState::help;
 	gameInst->Init(*windowRef);
 }

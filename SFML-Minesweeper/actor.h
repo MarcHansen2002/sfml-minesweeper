@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 enum ScaleMode
 {
@@ -122,6 +123,9 @@ public:
 	sf::Font font;
 	sf::String text;
 
+	sf::SoundBuffer buffer;
+	sf::Sound clickSound;
+
 	//Button styling
 	bool useSprite = false;
 	//Regular
@@ -138,6 +142,7 @@ public:
 	//Functions
 	button();
 	void Render(sf::RenderWindow& window);
+	void OnLeftClick();
 
 	sf::FloatRect GetRectCollision() override;
 };

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include "SFML/Audio.hpp"
 #include "actor.h"
 #include "database.h"
 
