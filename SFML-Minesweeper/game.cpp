@@ -46,6 +46,8 @@ void game::Init(sf::RenderWindow& window)
 }
 void game::Update(sf::RenderWindow& window, float elapsed)
 {
+	CheckMouseCollisions();
+
 	//Loop through actor list, check collisions and update
 	for (int i = 0; i < actors.size(); i++)
 	{
@@ -78,7 +80,25 @@ void game::Render(sf::RenderWindow& window, float elapsed)
 	}
 	
 }
+void game::CheckMouseCollisions()
+{
+	for (int i = 0; i < actors.size(); i++)
+	{
+		if (IsMouseColliding(*actors[i], *windowRef))
+		{
+			if (!actors[i]->hovered)
+			{
+				actors[i]->hovered = true;
+			}
+		}
+		else if (actors[i]->hovered)
+		{
+			actors[i]->hovered = false;
+		}
+	}
+}
 
+//Actor Management
 void game::AddActor(actor* actor, bool collidable)
 {
 	actor->gameInst = this;

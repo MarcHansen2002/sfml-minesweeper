@@ -86,6 +86,7 @@ public:
 	void Update(sf::RenderWindow& window, float elapsed); //Called every frame to update actors
 	void Render(sf::RenderWindow& window, float elapsed); //Called every frame to draw all actors
 	void Init(sf::RenderWindow& window); //Initialise the main game
+	void CheckMouseCollisions(); //Checks if any collisions happen between actors and the mouse for hover events
 
 	//Actor Handling
 	void AddActor(actor* actor, bool collidable = true); //Inits and adds an actor to vectors

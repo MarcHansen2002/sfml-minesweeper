@@ -1,14 +1,21 @@
-﻿  game.cpp
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(152,40): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(164,25): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(647,62): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(647,86): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(647,112): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(647,141): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(685,27): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(703,27): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  main.cpp
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\main.cpp(15,44): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\main.cpp(41,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  Generating Code...
+﻿  actor.cpp
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\actor.cpp(148,21): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\actor.cpp(164,21): warning C4244: '=': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\actor.cpp(165,22): warning C4244: '=': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\actor.cpp(363,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\actor.cpp(363,32): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\actor.cpp(386,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\actor.cpp(386,32): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   SFML-Minesweeper.vcxproj -> C:\Users\Marc\source\repos\SFML-Minesweeper\x64\Debug\SFML-Minesweeper.exe

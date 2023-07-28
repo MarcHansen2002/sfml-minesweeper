@@ -450,11 +450,40 @@ button::button()
 	{
 		assert(false);
 	}
+	origin = { 0.5, 0.5 };
 }
 
 void button::Render(sf::RenderWindow& window)
 {
-	window.draw(sprite);
+	if (useSprite)
+	{
+		window.draw(sprite);
+	}
+	else
+	{
+		sf::RectangleShape buttonShape;
+		if (!hovered)
+		{
+			buttonShape.setFillColor(boxColour);
+			buttonShape.setOutlineColor(borderColour);
+			buttonShape.setOutlineThickness(borderSize);
+			buttonShape.setSize(boxSize);
+		}
+		else
+		{
+			buttonShape.setFillColor(hoveredBoxColour);
+			buttonShape.setOutlineColor(hoveredBorderColour);
+			buttonShape.setOutlineThickness(hoveredBorderSize);
+			buttonShape.setSize(hoveredBoxSize);
+		}
+
+		
+		buttonShape.setOrigin(buttonShape.getLocalBounds().width / 2.f, buttonShape.getLocalBounds().height / 2.f);
+		buttonShape.setPosition(location);
+		windowRef->draw(buttonShape);
+	}
+
+	//Render text
 	sf::Text textOBJ;
 
 	textOBJ.setString(text);
@@ -464,10 +493,37 @@ void button::Render(sf::RenderWindow& window)
 	
 	sf::FloatRect objRect = textOBJ.getLocalBounds();
 	textOBJ.setOrigin(objRect.width / 2.f, objRect.height / 2.f);
-	textOBJ.setPosition(location.x, location.y - 5);
+	textOBJ.setPosition(location.x -5, location.y -5);
 
 	window.draw(textOBJ);
 }
+
+sf::FloatRect button::GetRectCollision()
+{
+	sf::FloatRect TextRect;
+	if (useSprite)
+	{
+		TextRect = (sf::FloatRect)sprite.getTextureRect();
+	}
+	else
+	{
+		sf::RectangleShape shape;
+		shape.setSize(boxSize);
+		shape.setOutlineThickness(borderSize);
+
+		TextRect = shape.getLocalBounds();
+	}
+	sf::Vector2f scaleVal = GetScale();
+	scaleVal = { 1, 1 };
+	sf::FloatRect PositionalRect;
+	PositionalRect.left = location.x - ((TextRect.width / (1.f / origin.x)) * scaleVal.x);
+	PositionalRect.top = location.y - ((TextRect.height / (1.f / origin.y)) * scaleVal.y);
+	PositionalRect.width = ((float)TextRect.width) * scaleVal.x;
+	PositionalRect.height = ((float)TextRect.height) * scaleVal.y;
+	return PositionalRect;
+
+}
+
 
 //Play Button
 playButton::playButton()

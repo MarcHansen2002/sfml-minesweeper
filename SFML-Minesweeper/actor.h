@@ -20,6 +20,10 @@ class actor
 {
 public:
 	//Variables
+	
+	//Control
+	bool hovered = false;
+
 	//References
 	game *gameInst = nullptr; //Reference to the game object
 	sf::RenderWindow* windowRef = nullptr; //Reference to the rendered window
@@ -56,7 +60,7 @@ public:
 	//Collision
 	void DisplayHitbox(sf::RenderWindow& window);
 	void DisplayTextureRect(sf::RenderWindow& window);
-	sf::FloatRect GetRectCollision();
+	virtual sf::FloatRect GetRectCollision();
 };
 
 class tile : public actor
@@ -118,9 +122,24 @@ public:
 	sf::Font font;
 	sf::String text;
 
+	//Button styling
+	bool useSprite = false;
+	//Regular
+	sf::Vector2f boxSize = { 150,50 };
+	float borderSize = 5;
+	sf::Color boxColour = sf::Color(82, 82, 82);
+	sf::Color borderColour = sf::Color(28, 28, 28);
+	//Hovered
+	sf::Vector2f hoveredBoxSize = { 165, 55 };
+	float hoveredBorderSize = 10;
+	sf::Color hoveredBoxColour = sf::Color(138, 138, 138);
+	sf::Color hoveredBorderColour = sf::Color(59, 59, 59);
+
 	//Functions
 	button();
 	void Render(sf::RenderWindow& window);
+
+	sf::FloatRect GetRectCollision() override;
 };
 
 class playButton : public button
