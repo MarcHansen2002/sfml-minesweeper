@@ -444,12 +444,6 @@ button::button()
 	type = "button";
 	texturePath = "../Assets/Button.png";
 	origin = { 0.5, 0.5 };
-	if (!buffer.loadFromFile("../Assets/Sounds/Click.wav"))
-	{
-		std::cout << "no sound";
-		assert(false);
-	}
-	clickSound.setBuffer(buffer);
 }
 
 void button::Render(sf::RenderWindow& window)
@@ -498,7 +492,7 @@ void button::Render(sf::RenderWindow& window)
 }
 void button::OnLeftClick()
 {
-	//sound.setBuffer(*gameInst->resources.GetSound("../Assets/Sounds/Click.wav"));
+	clickSound.setBuffer(*gameInst->resources.GetSound("../Assets/Sounds/Click.wav"));
 	clickSound.play();
 }
 

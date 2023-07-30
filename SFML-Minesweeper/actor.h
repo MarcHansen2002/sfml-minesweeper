@@ -35,8 +35,6 @@ public:
 	sf::Texture* texture; //Loaded texture from texturePath
 	sf::String texturePath; //Directory of texture
 
-	sf::Sound sound;
-
 	sf::Sprite sprite;
 	SpriteSheet sheetData;
 
@@ -123,7 +121,6 @@ class button : public actor
 {
 public:
 
-	sf::SoundBuffer buffer;
 	sf::Sound clickSound;
 
 	//Variables
