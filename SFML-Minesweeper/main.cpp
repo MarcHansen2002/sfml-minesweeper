@@ -86,13 +86,15 @@ int main()
         window.display();
     }
    
-    //End
+    //Clear everything and exit
+    gameInst.ClearActors();
+    gameInst.resources.ClearSounds();
+    gameInst.resources.ClearTextures();
+    gameInst.resources.ClearFonts();
     return 0;
 }
 
 //TODO
 //Sounds
-//Button hover effect
-//Make button more modular
 
 //End goal: Portfolio piece with git shown on site. Build game for itch.io and ask for feedback from minesweeper subreddit

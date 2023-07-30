@@ -32,8 +32,11 @@ public:
 
 	//Texture
 	sf::IntRect textRect; //Displayed part of texture
-	sf::Texture texture; //Loaded texture from texturePath
+	sf::Texture* texture; //Loaded texture from texturePath
 	sf::String texturePath; //Directory of texture
+
+	sf::Sound sound;
+
 	sf::Sprite sprite;
 	SpriteSheet sheetData;
 
@@ -119,12 +122,13 @@ public:
 class button : public actor
 {
 public:
-	//Variables
-	sf::Font font;
-	sf::String text;
 
 	sf::SoundBuffer buffer;
 	sf::Sound clickSound;
+
+	//Variables
+	sf::Font font;
+	sf::String text;
 
 	//Button styling
 	bool useSprite = false;

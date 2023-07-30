@@ -9,13 +9,14 @@
 actor::actor()
 {
 }
+
 //Required
 void actor::Init()
 {
 	windowRef = gameInst->windowRef;
 
-	LoadTexture(texturePath, texture);
-	sprite.setTexture(texture);
+	texture = gameInst->resources.GetTexture(texturePath);
+	sprite.setTexture(*texture);
 
 	UpdateSprite();
 	
@@ -35,7 +36,7 @@ void actor::Update(float elapsed)
 void actor::UpdateSprite()
 {
 	//Set sprite to a small section of the texture to allow for sprite sheets
-	textRect = sf::IntRect(((sheetData.index - 1) % sheetData.columns) * texture.getSize().x / sheetData.columns, ((sheetData.index - 1) / sheetData.columns) * texture.getSize().y / sheetData.rows, texture.getSize().x / sheetData.columns, texture.getSize().y / sheetData.rows);
+	textRect = sf::IntRect(((sheetData.index - 1) % sheetData.columns) * texture->getSize().x / sheetData.columns, ((sheetData.index - 1) / sheetData.columns) * texture->getSize().y / sheetData.rows, texture->getSize().x / sheetData.columns, texture->getSize().y / sheetData.rows);
 	//Set origin to the centre of the actor and set the sprite's texture
 	sprite.setOrigin((textRect.width / (1.f / origin.x)), (textRect.height / (1.f / origin.y)));
 	sprite.setTextureRect(textRect);
@@ -442,17 +443,13 @@ button::button()
 {
 	type = "button";
 	texturePath = "../Assets/Button.png";
-	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
-	{
-		assert(false);
-	}
+	origin = { 0.5, 0.5 };
 	if (!buffer.loadFromFile("../Assets/Sounds/Click.wav"))
 	{
 		std::cout << "no sound";
 		assert(false);
 	}
 	clickSound.setBuffer(buffer);
-	origin = { 0.5, 0.5 };
 }
 
 void button::Render(sf::RenderWindow& window)
@@ -489,7 +486,7 @@ void button::Render(sf::RenderWindow& window)
 	sf::Text textOBJ;
 
 	textOBJ.setString(text);
-	textOBJ.setFont(font);
+	textOBJ.setFont(*gameInst->resources.GetFont("../Assets/Fonts/arial.ttf"));
 	textOBJ.setFillColor(sf::Color::Black);
 	textOBJ.setCharacterSize(24);
 	
@@ -501,6 +498,7 @@ void button::Render(sf::RenderWindow& window)
 }
 void button::OnLeftClick()
 {
+	//sound.setBuffer(*gameInst->resources.GetSound("../Assets/Sounds/Click.wav"));
 	clickSound.play();
 }
 

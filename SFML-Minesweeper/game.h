@@ -6,6 +6,7 @@
 #include "SFML/Audio.hpp"
 #include "actor.h"
 #include "database.h"
+#include <assert.h>
 
 
 
@@ -48,6 +49,29 @@ public:
 	difficultyData GetDifficultyData(std::string diff);
 };
 
+class ResourceManager
+{
+public:
+	//Textures
+	sf::Texture* GetTexture(std::string filePath);
+	void ClearTextures();
+
+	std::map<std::string, sf::Texture*> textures;
+	sf::String missingTexture = "../Assets/MissingTexture.png";
+
+	//Sound
+	sf::SoundBuffer* GetSound(std::string filePath);
+	void ClearSounds();
+
+	std::map<std::string, sf::SoundBuffer*> sounds;
+	sf::String missingSound = "../Assets/MissingSound.wav";
+
+	//Fonts
+	sf::Font* GetFont(std::string filePath);
+	void ClearFonts();
+	std::map<std::string, sf::Font*> fonts;
+};
+
 class game
 {
 public:
@@ -66,6 +90,7 @@ public:
 	//References
 	Metrics metrics;
 	sf::RenderWindow* windowRef = nullptr;
+	ResourceManager resources;
 	
 	//Actors
 	std::vector<actor*> actors; //Objects within the game
