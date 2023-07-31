@@ -1,1 +1,30 @@
-﻿  SFML-Minesweeper.vcxproj -> C:\Users\Marc\source\repos\SFML-Minesweeper\x64\Debug\SFML-Minesweeper.exe
+﻿  actor.cpp
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\actor.cpp(145,21): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\actor.cpp(175,14): warning C4244: '=': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\actor.cpp(176,14): warning C4244: '=': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=int
+          ]
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\actor.cpp(364,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\actor.cpp(364,32): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\actor.cpp(387,53): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\actor.cpp(387,32): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  game.cpp
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(172,40): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(184,25): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  main.cpp
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\main.cpp(15,44): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\main.cpp(41,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  ResourceManager.cpp
+  Generating Code...
+sqlite3.obj : warning LNK4099: PDB '' was not found with 'sqlite3.obj' or at ''; linking object as if no debug info
+  SFML-Minesweeper.vcxproj -> C:\Users\Marc\source\repos\SFML-Minesweeper\x64\Debug\SFML-Minesweeper.exe

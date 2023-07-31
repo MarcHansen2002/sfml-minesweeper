@@ -1,78 +1,15 @@
 #pragma once
+//SMFL
 #include <SFML/Graphics.hpp>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
 #include "SFML/Audio.hpp"
+//Other Libs
+#include <iostream>
+#include <assert.h>
+//My Files
 #include "actor.h"
 #include "database.h"
-#include <assert.h>
-
-
-
-class Metrics
-{
-public:
-	const std::string VERSION = "1.0";
-
-	bool useDB = true;
-	database db;
-
-	struct difficultyData
-	{
-		std::string difficultyName = "na";
-		float time;
-		int attempts;
-		int completions;
-	};
-	difficultyData currentData;
-	std::vector<difficultyData> diffData;
-	std::string filePath;
-
-	//Resets current stored stats
-	//void Restart();
-
-	bool Load(const std::string& path)
-	{
-		return DBLoad(path);
-	}
-	bool Save(const std::string& path = "")
-	{
-		return DBSave(path);
-	}
-
-	bool DBSave(const std::string& path = "");
-	bool DBLoad(const std::string& path = "");
-
-	void GetCurrentData();
-	void StoreCurrentData();
-	difficultyData GetDifficultyData(std::string diff);
-};
-
-class ResourceManager
-{
-public:
-	//Textures
-	sf::Texture* GetTexture(std::string filePath);
-	void ClearTextures();
-
-	std::map<std::string, sf::Texture*> textures;
-	sf::String missingTexture = "../Assets/MissingTexture.png";
-
-	//Sound
-	sf::SoundBuffer* GetSound(std::string filePath);
-	void ClearSounds();
-	void PlaySound(std::string filePath);
-
-	std::map<std::string, sf::SoundBuffer*> sounds;
-	sf::Sound currentSound;
-	sf::String missingSound = "../Assets/MissingSound.wav";
-
-	//Fonts
-	sf::Font* GetFont(std::string filePath);
-	void ClearFonts();
-	std::map<std::string, sf::Font*> fonts;
-};
+#include "Metrics.h"
+#include "ResourceManager.h"
 
 class game
 {

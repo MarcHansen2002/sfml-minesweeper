@@ -1,9 +1,5 @@
 #include "actor.h"
 #include "game.h"
-#include <assert.h>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
 
 // ===================================================================== BASE ACTOR
 actor::actor()

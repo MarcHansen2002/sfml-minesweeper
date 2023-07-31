@@ -91,12 +91,6 @@ int main()
     
     gameInst.resources.ClearTextures();
     gameInst.resources.ClearFonts();
-    //gameInst.resources.ClearSounds();
+    gameInst.resources.ClearSounds();
     return 0;
 }
-
-//TODO
-//Sounds
-//Fix sound error with OpenAL32 and make use of the sound storage system
-
-//End goal: Portfolio piece with git shown on site. Build game for itch.io and ask for feedback from minesweeper subreddit
