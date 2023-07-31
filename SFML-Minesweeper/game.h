@@ -20,7 +20,7 @@ public:
 
 	struct difficultyData
 	{
-		std::string difficultyName;
+		std::string difficultyName = "na";
 		float time;
 		int attempts;
 		int completions;
@@ -62,8 +62,10 @@ public:
 	//Sound
 	sf::SoundBuffer* GetSound(std::string filePath);
 	void ClearSounds();
+	void PlaySound(std::string filePath);
 
 	std::map<std::string, sf::SoundBuffer*> sounds;
+	sf::Sound currentSound;
 	sf::String missingSound = "../Assets/MissingSound.wav";
 
 	//Fonts

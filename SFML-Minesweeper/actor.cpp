@@ -8,6 +8,7 @@
 // ===================================================================== BASE ACTOR
 actor::actor()
 {
+	texture = nullptr;
 }
 
 //Required
@@ -151,15 +152,20 @@ tile::tile()
 
 	revealed = false;
 	flagged = false;
+
+	
 }
 //Required
 void tile::Init()
 {
 	actor::Init();
 
+	//openSoundBuff = gameInst->resources.GetSound("../Assets/Sounds/TileOpen.wav");
+	//explodeSoundBuff = gameInst->resources.GetSound("../Assets/Sounds/Explosion.wav");
+
 	origin = { 0, 0 };
 	//Get pixel size of one tile
-	int sizeX, sizeY, i, x;
+	float sizeX, sizeY, i, x;
 	sf::FloatRect size = GetRectCollision();
 	sizeX = size.width - size.left;
 	sizeY = size.height - size.top;
@@ -218,6 +224,7 @@ void tile::OnLeftClick()
 		//Mine pressed
 		if (id == 11)
 		{
+			gameInst->resources.PlaySound("../Assets/Sounds/Explosion.wav");
 			//Set tile to clicked mine sprite
 			id = 15;
 			//End game with a loss
@@ -236,6 +243,7 @@ void tile::OnLeftClick()
 			//If tile has 5 or less bombs around check for empties. Impossible to have any empties if more than 5 bombs surround
 			gameInst->OpenSurroundingEmpties(gridLoc);
 		}
+		gameInst->resources.PlaySound("../Assets/Sounds/TileOpen.wav");
 		gameInst->tilesToWin--;
 		
 		//Last tile pressed
@@ -492,8 +500,7 @@ void button::Render(sf::RenderWindow& window)
 }
 void button::OnLeftClick()
 {
-	clickSound.setBuffer(*gameInst->resources.GetSound("../Assets/Sounds/Click.wav"));
-	clickSound.play();
+	gameInst->resources.PlaySound("../Assets/Sounds/Click.wav");
 }
 
 sf::FloatRect button::GetRectCollision()

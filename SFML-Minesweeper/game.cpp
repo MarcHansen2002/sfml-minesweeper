@@ -840,3 +840,9 @@ void ResourceManager::ClearFonts()
 	//Clear font map
 	fonts.clear();
 }
+
+void ResourceManager::PlaySound(std::string filePath)
+{
+	currentSound.setBuffer(*GetSound(filePath));
+	currentSound.play();
+}

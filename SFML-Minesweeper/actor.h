@@ -120,9 +120,6 @@ public:
 class button : public actor
 {
 public:
-
-	sf::Sound clickSound;
-
 	//Variables
 	sf::Font font;
 	sf::String text;
