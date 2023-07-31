@@ -1,9 +1,12 @@
-﻿  game.cpp
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(172,40): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\game.cpp(184,25): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+﻿  main.cpp
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\main.cpp(15,44): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Marc\source\repos\SFML-Minesweeper\SFML-Minesweeper\main.cpp(41,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   Generating code
-  0 of 3444 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  0 of 3448 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
+sqlite3.obj : warning LNK4099: PDB '' was not found with 'sqlite3.obj' or at ''; linking object as if no debug info
+database.obj : warning LNK4099: PDB '' was not found with 'database.obj' or at ''; linking object as if no debug info
+Metrics.obj : warning LNK4099: PDB '' was not found with 'Metrics.obj' or at ''; linking object as if no debug info
   SFML-Minesweeper.vcxproj -> C:\Users\Marc\source\repos\SFML-Minesweeper\x64\Release\SFML-Minesweeper.exe

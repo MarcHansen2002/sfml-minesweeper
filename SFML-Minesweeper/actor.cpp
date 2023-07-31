@@ -600,7 +600,10 @@ void helpButton::OnLeftClick()
 //===================================================================== BUTTONS
 textBox::textBox()
 {
-	font = *gameInst->resources.GetFont("Fonts/arial.ttf");
+	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
+	{
+		assert(false);
+	}
 	text.setString(string);
 	text.setFont(font);
 	text.setFillColor(sf::Color::White);
