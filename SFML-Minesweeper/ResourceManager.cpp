@@ -3,6 +3,7 @@
 sf::Texture* ResourceManager::GetTexture(std::string filePath)
 {
 	//Check if texture already exists
+	filePath = assetPath + filePath;
 	if (textures.find(filePath) != textures.end())
 	{
 		return textures.at(filePath);
@@ -34,6 +35,7 @@ void ResourceManager::ClearTextures()
 
 sf::SoundBuffer* ResourceManager::GetSound(std::string filePath)
 {
+	filePath = assetPath + filePath;
 	if (sounds.find(filePath) != sounds.end())
 	{
 		return sounds.at(filePath);
@@ -95,6 +97,7 @@ void ResourceManager::ClearFonts()
 
 void ResourceManager::PlaySound(std::string filePath)
 {
+	filePath = assetPath + filePath;
 	currentSound.setBuffer(*GetSound(filePath));
 	currentSound.play();
 }

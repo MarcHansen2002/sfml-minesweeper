@@ -141,7 +141,7 @@ void actor::DisplayTextureRect(sf::RenderWindow& window)
 tile::tile()
 {
 	type = "tile";
-	texturePath = "../Assets/SweeperSheet.png";
+	texturePath = "SweeperSheet.png";
 	scale = { 2.8, 2.8 };
 	sheetData.columns = 3;
 	sheetData.rows = 5;
@@ -342,7 +342,7 @@ void tile::OnMiddleClick()
 timer::timer()
 {
 	type = "ui";
-	texturePath = "../Assets/TimeDisplay.png";
+	texturePath = "TimeDisplay.png";
 	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
 	{
 		assert(false);
@@ -369,7 +369,7 @@ void timer::Render(sf::RenderWindow& window)
 flagCount::flagCount()
 {
 	type = "ui";
-	texturePath = "../Assets/FlagDisplay.png";
+	texturePath = "FlagDisplay.png";
 	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
 	{
 		assert(false);
@@ -446,7 +446,7 @@ bool LoadTexture(const sf::String& file, sf::Texture& texture)
 button::button()
 {
 	type = "button";
-	texturePath = "../Assets/Button.png";
+	texturePath = "Button.png";
 	origin = { 0.5, 0.5 };
 }
 
@@ -600,11 +600,7 @@ void helpButton::OnLeftClick()
 //===================================================================== BUTTONS
 textBox::textBox()
 {
-	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
-	{
-		std::cout << "text fail";
-		assert(false);
-	}
+	font = *gameInst->resources.GetFont("Fonts/arial.ttf");
 	text.setString(string);
 	text.setFont(font);
 	text.setFillColor(sf::Color::White);

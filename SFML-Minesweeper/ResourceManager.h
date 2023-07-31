@@ -11,12 +11,14 @@
 class ResourceManager
 {
 public:
+	const std::string assetPath = "../Assets/";
+
 	//Textures
 	sf::Texture* GetTexture(std::string filePath);
 	void ClearTextures();
 
 	std::map<std::string, sf::Texture*> textures;
-	sf::String missingTexture = "../Assets/MissingTexture.png";
+	sf::String missingTexture = "MissingTexture.png";
 
 	//Sound
 	sf::SoundBuffer* GetSound(std::string filePath);
@@ -25,7 +27,7 @@ public:
 
 	std::map<std::string, sf::SoundBuffer*> sounds;
 	sf::Sound currentSound;
-	sf::String missingSound = "../Assets/MissingSound.wav";
+	sf::String missingSound = "MissingSound.wav";
 
 	//Fonts
 	sf::Font* GetFont(std::string filePath);
