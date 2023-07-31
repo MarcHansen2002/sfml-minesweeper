@@ -494,7 +494,7 @@ void game::InitMenu()
 
 	playButton* easyButton = nullptr;
 	easyButton = new playButton;
-	easyButton->location = { windowRef->getSize().x / 2.f, 100 };
+	easyButton->location = { 220, 400 };
 	easyButton->size = { 9, 9 };
 	easyButton->count = 10;
 	easyButton->text = "Easy";
@@ -503,7 +503,7 @@ void game::InitMenu()
 	
 	playButton* normalButton = nullptr;
 	normalButton = new playButton;
-	normalButton->location = { windowRef->getSize().x / 2.f, 200 };
+	normalButton->location = { 220, 600 };
 	normalButton->size = { 16, 16 };
 	normalButton->count = 40;
 	normalButton->text = "Normal";
@@ -512,7 +512,7 @@ void game::InitMenu()
 
 	playButton* hardButton = nullptr;
 	hardButton = new playButton;
-	hardButton->location = { windowRef->getSize().x / 2.f, 300 };
+	hardButton->location = { 220, 800 };
 	hardButton->size = { 30, 16 };
 	hardButton->count = 99;
 	hardButton->text = "Hard";
@@ -522,14 +522,14 @@ void game::InitMenu()
 	//Stats button
 	statsButton* stats = nullptr;
 	stats = new statsButton;
-	stats->location = { windowRef->getSize().x / 2.f, 500 };
+	stats->location = { 1380, 500 };
 	stats->scale = { 3, 3 };
 	AddActor(stats);
 
 	//Help button
 	helpButton* help = nullptr;
 	help = new helpButton;
-	help->location = { windowRef->getSize().x / 2.f, 600 };
+	help->location = { 1380, 700 };
 	help->scale = { 3, 3 };
 	AddActor(help);
 }

@@ -36,13 +36,20 @@ void MouseClick(game* gameInst, sf::RenderWindow* window)
 int main()
 {
     //Initialise window
-    sf::RenderWindow window(sf::VideoMode(1600, 900), "Marcsweeper!");
+    sf::RenderWindow window(sf::VideoMode(1600, 900), "Minesweeper!");
     
     srand(time(NULL));
     game gameInst;
     gameInst.resolution = { 1600, 900 };
     gameInst.windowRef = &window;
     gameInst.Init(window);
+
+    //Load image for window's icon
+    sf::Image winIcon = sf::Image();
+    if (winIcon.loadFromFile("../Assets/BombIcon.png"))
+    {
+        window.setIcon(winIcon.getSize().x, winIcon.getSize().y, winIcon.getPixelsPtr());
+    }
 
     sf::Clock clock;
    
