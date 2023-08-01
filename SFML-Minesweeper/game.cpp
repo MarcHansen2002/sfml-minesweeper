@@ -25,7 +25,7 @@ game::game()
 }
 void game::Init(sf::RenderWindow& window)
 {
-	metrics.Load("../Data/Stats.db");
+	metrics.Load("Data/Stats.db");
 	switch (state)
 	{
 	case GameState::menu:
@@ -406,7 +406,7 @@ void game::GameOver()
 		}
 	}
 	metrics.StoreCurrentData();
-	metrics.DBSave("../Data/Stats.db");
+	metrics.DBSave("Data/Stats.db");
 	AddFinishButtons();
 }
 void game::GameWin()
@@ -422,7 +422,7 @@ void game::GameWin()
 	}
 	//Store current data back into the stored data
 	metrics.StoreCurrentData();
-	metrics.DBSave("../Data/Stats.db");
+	metrics.DBSave("Data/Stats.db");
 	AddFinishButtons();
 }
 void game::AddFinishButtons()
@@ -456,7 +456,7 @@ void game::InitGame()
 
 	//Create background object
 	image* BG = nullptr;
-	BG = new image("../Assets/SweeperBG.png");
+	BG = new image("Backgrounds/SweeperBG.png");
 	BG->scaleType = ScaleMode::stretch;
 	BG->origin = { 0, 0 };
 	BG->zLayer = 0;
@@ -485,7 +485,7 @@ void game::InitMenu()
 	ClearActors();
 
 	image* bg = nullptr;
-	bg = new image("../Assets/Backgrounds/MinesweeperPlainBG.png");
+	bg = new image("Backgrounds/MinesweeperPlainBG.png");
 	bg->scaleType = stretch;
 	bg->origin = { 0, 0 };
 	bg->location = { 0, 0 };
@@ -538,7 +538,7 @@ void game::InitHelp()
 	ClearActors();
 
 	image* bg = nullptr;
-	bg = new image("../Assets/Backgrounds/MinesweeperHelpBG.png");
+	bg = new image("Backgrounds/MinesweeperHelpBG.png");
 	bg->scaleType = stretch;
 	bg->origin = { 0, 0 };
 	bg->location = { 0, 0 };
@@ -556,7 +556,7 @@ void game::InitStats()
 
 	//Create background image and place it
 	image* bg = nullptr;
-	bg = new image("../Assets/Backgrounds/MinesweeperStatsBG.png");
+	bg = new image("Backgrounds/MinesweeperStatsBG.png");
 	bg->scaleType = stretch;
 	bg->origin = { 0, 0 };
 	bg->location = { 0, 0 };
@@ -578,7 +578,7 @@ void game::InitStats()
 	easyStats->string += "\n\nCompletions: " + std::to_string(easyData.completions);
 	easyStats->string += "\n\nAttempts: " + std::to_string(easyData.attempts);
 	AddActor(easyStats, false);
-
+	
 	//Create text for normal stats
 	textBox* normalStats = nullptr;
 	normalStats = new textBox;
@@ -595,14 +595,14 @@ void game::InitStats()
 	normalStats->string += "\n\nCompletions: " + std::to_string(normalData.completions);
 	normalStats->string += "\n\nAttempts: " + std::to_string(normalData.attempts);
 	AddActor(normalStats, false);
-
+	
 	//Create text for hard stats
 	textBox* hardStats = nullptr;
 	hardStats = new textBox;
 	hardStats->textColour = sf::Color::Black;
 	hardStats->location = { 1300, 400 };
 	//Fetch hard stats
-	Metrics::difficultyData hardData = metrics.GetDifficultyData("Normal");
+	Metrics::difficultyData hardData = metrics.GetDifficultyData("Hard");
 	//Round time to 2 decimal place
 	std::stringstream hardStream;
 	float hardTime = hardData.time;

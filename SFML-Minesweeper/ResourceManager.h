@@ -11,7 +11,7 @@
 class ResourceManager
 {
 public:
-	const std::string assetPath = "../Assets/";
+	const std::string assetPath = "Assets/";
 
 	//Textures
 	sf::Texture* GetTexture(std::string filePath);

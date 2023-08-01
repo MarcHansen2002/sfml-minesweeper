@@ -35,7 +35,6 @@ void ResourceManager::ClearTextures()
 
 sf::SoundBuffer* ResourceManager::GetSound(std::string filePath)
 {
-	filePath = assetPath + filePath;
 	if (sounds.find(filePath) != sounds.end())
 	{
 		return sounds.at(filePath);

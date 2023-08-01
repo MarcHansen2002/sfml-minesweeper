@@ -156,9 +156,6 @@ void tile::Init()
 {
 	actor::Init();
 
-	//openSoundBuff = gameInst->resources.GetSound("../Assets/Sounds/TileOpen.wav");
-	//explodeSoundBuff = gameInst->resources.GetSound("../Assets/Sounds/Explosion.wav");
-
 	origin = { 0, 0 };
 	//Get pixel size of one tile
 	float sizeX, sizeY, i, x;
@@ -220,7 +217,7 @@ void tile::OnLeftClick()
 		//Mine pressed
 		if (id == 11)
 		{
-			gameInst->resources.PlaySound("../Assets/Sounds/Explosion.wav");
+			gameInst->resources.PlaySound("Sounds/Explosion.wav");
 			//Set tile to clicked mine sprite
 			id = 15;
 			//End game with a loss
@@ -239,7 +236,7 @@ void tile::OnLeftClick()
 			//If tile has 5 or less bombs around check for empties. Impossible to have any empties if more than 5 bombs surround
 			gameInst->OpenSurroundingEmpties(gridLoc);
 		}
-		gameInst->resources.PlaySound("../Assets/Sounds/TileOpen.wav");
+		gameInst->resources.PlaySound("Sounds/TileOpen.wav");
 		gameInst->tilesToWin--;
 		
 		//Last tile pressed
@@ -343,7 +340,7 @@ timer::timer()
 {
 	type = "ui";
 	texturePath = "TimeDisplay.png";
-	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
+	if (!font.loadFromFile("Assets/Fonts/arial.ttf"))
 	{
 		assert(false);
 	}
@@ -370,7 +367,7 @@ flagCount::flagCount()
 {
 	type = "ui";
 	texturePath = "FlagDisplay.png";
-	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
+	if (!font.loadFromFile("Assets/Fonts/arial.ttf"))
 	{
 		assert(false);
 	}
@@ -484,7 +481,7 @@ void button::Render(sf::RenderWindow& window)
 	sf::Text textOBJ;
 
 	textOBJ.setString(text);
-	textOBJ.setFont(*gameInst->resources.GetFont("../Assets/Fonts/arial.ttf"));
+	textOBJ.setFont(*gameInst->resources.GetFont("Assets/Fonts/arial.ttf"));
 	textOBJ.setFillColor(sf::Color::Black);
 	textOBJ.setCharacterSize(24);
 	
@@ -496,7 +493,7 @@ void button::Render(sf::RenderWindow& window)
 }
 void button::OnLeftClick()
 {
-	gameInst->resources.PlaySound("../Assets/Sounds/Click.wav");
+	gameInst->resources.PlaySound("Sounds/Click.wav");
 }
 
 sf::FloatRect button::GetRectCollision()
@@ -600,7 +597,7 @@ void helpButton::OnLeftClick()
 //===================================================================== BUTTONS
 textBox::textBox()
 {
-	if (!font.loadFromFile("../Assets/Fonts/arial.ttf"))
+	if (!font.loadFromFile("Assets/Fonts/arial.ttf"))
 	{
 		assert(false);
 	}

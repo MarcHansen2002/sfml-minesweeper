@@ -46,7 +46,7 @@ int main()
 
     //Load image for window's icon
     sf::Image winIcon = sf::Image();
-    if (winIcon.loadFromFile("../Assets/BombIcon.png"))
+    if (winIcon.loadFromFile("Assets/BombIcon.png"))
     {
         window.setIcon(winIcon.getSize().x, winIcon.getSize().y, winIcon.getPixelsPtr());
     }
