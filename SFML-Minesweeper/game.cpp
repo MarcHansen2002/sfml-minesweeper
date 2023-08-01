@@ -522,16 +522,23 @@ void game::InitMenu()
 	//Stats button
 	statsButton* stats = nullptr;
 	stats = new statsButton;
-	stats->location = { 1380, 500 };
+	stats->location = { 1380, 400 };
 	stats->scale = { 3, 3 };
 	AddActor(stats);
 
 	//Help button
 	helpButton* help = nullptr;
 	help = new helpButton;
-	help->location = { 1380, 700 };
+	help->location = { 1380, 600 };
 	help->scale = { 3, 3 };
 	AddActor(help);
+
+	//Quit button
+	exitButton* exit = nullptr;
+	exit = new exitButton;
+	exit->location = { 1380, 800 };
+	exit->scale = { 3, 3 };
+	AddActor(exit);
 }
 void game::InitHelp()
 {

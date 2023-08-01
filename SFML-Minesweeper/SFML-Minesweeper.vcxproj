@@ -228,7 +228,14 @@ xcopy "$(SolutionDir)SFML\bin\openal32.dll" "$(SolutionDir)x64\$(Configuration)\
     <ClInclude Include="database.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="Metrics.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ResourceManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SFML-Minesweeper.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
